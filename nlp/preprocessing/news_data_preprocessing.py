@@ -1,7 +1,6 @@
 import pandas as pd
 import re
 import uuid
-from sklearn.feature_extraction.text import TfidfVectorizer
 from konlpy.tag import Mecab
 
 # Load the dataset
