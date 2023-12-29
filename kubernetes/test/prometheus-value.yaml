@@ -1,0 +1,10 @@
+server:
+  extraScrapeConfigs: |
+    - job_name: 'flask-app'
+      metrics_path: '/metrics'
+      kubernetes_sd_configs:
+        - role: pod
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_label_app]
+          action: keep
+          regex: flask-app  # Replace with the label of your Flask app pods

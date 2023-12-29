@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-loadbalancer-service
+spec:
+  type: LoadBalancer
+  selector:
+    name: flask-app  # Match the label used in your deployment
+  ports:
+    - protocol: TCP
+      port: 80           # The external port for the service
+      targetPort: 5000   # The internal port of the container
