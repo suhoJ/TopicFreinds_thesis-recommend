@@ -15,9 +15,9 @@ def add_crawling(link_url):
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
         English_title = soup.select_one('#thesisEqualTitle').get_text(strip=True) if soup.select_one('#thesisEqualTitle') else None
-        summary = soup.select_one('div.abstractTxt').get_text(strip=True) if soup.select_one('div.abstractTxt') else None
+        abstract = soup.select_one('div.abstractTxt').get_text(strip=True) if soup.select_one('div.abstractTxt') else None
         keywords = [kw.get_text(strip=True) for kw in soup.select('div.keywordWrap')] if soup.select('div.keywordWrap') else []
-        return {'English_title': English_title, 'summary': summary, 'keywords': keywords}
+        return {'English_title': English_title, 'abstract': abstract, 'keywords': keywords}
     return {}
 
 def get_api():
