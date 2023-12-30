@@ -6,3 +6,11 @@
 https://www.notion.so/2-0bc33b79688d47af8dd36702917730fb
 
 thesis rocommendation project in goorm
+
+
+
+팀원들 이해를 높이기 위한 코드 순서입니다.
+1. 뉴스 데이터 전처리
+2. BERTopic을 이용한 키워드 추출
+3. 논문 검색 API 호출
+4. KLUE-RoBERTa 모델 실행
