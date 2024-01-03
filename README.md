@@ -14,3 +14,8 @@ thesis rocommendation project in goorm
 2. BERTopic을 이용한 키워드 추출
 3. 논문 검색 API 호출
 4. KLUE-RoBERTa 모델 실행
+
+
+![아키텍쳐3 drawio](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/5aff3977-99e6-4119-8edd-219b7ea0266e)
+
+![CI_CD pipeline](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/a769a04e-628b-4c52-9688-85a78497d90e)
