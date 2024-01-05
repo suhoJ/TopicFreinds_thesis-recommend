@@ -179,7 +179,7 @@ def extract_article(data):
     finally:
           conn.close()
 
-def main():
+def start_crawling(start_date, end_date, max_page):    # 원래 main이었던 함수
     start_time = time.time()
     try:
         conn = create_db()
@@ -190,5 +190,5 @@ def main():
     except Exception as e:
         logging.error(f"An error occurred: {e}")
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
