@@ -19,3 +19,5 @@ thesis rocommendation project in goorm
 ![아키텍쳐3 drawio](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/5aff3977-99e6-4119-8edd-219b7ea0266e)
 
 ![CI_CD pipeline](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/a769a04e-628b-4c52-9688-85a78497d90e)
+
+![data flow](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/f6e7588e-2fce-47cb-98ad-d5c84b95ac16)
