@@ -25,3 +25,6 @@ thesis rocommendation project in goorm
 ![data flow](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/f6e7588e-2fce-47cb-98ad-d5c84b95ac16)
 
 ![버저닝 drawio (1)](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/7e6453bf-9fa6-466e-9de8-26ef01e92608)
+
+<img width="569" alt="스크린샷 2024-01-17 오후 1 42 03" src="https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/260d6eed-00a8-4298-9afb-0d4a8c2adf10">
+<img width="572" alt="스크린샷 2024-01-17 오후 1 42 09" src="https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/8c9b3f17-09b6-4513-98c9-a366ff1e9556">
