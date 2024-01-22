@@ -47,7 +47,7 @@ pipeline {
               container('docker') {
                 checkout scm
                 def imageName = "topic-friends/thesis-recommend"
-                sh "sed -i 's|topic-friends/thesis-recommend:.*|${tag}|' .kubernetes/test/flask-deployment.yaml"
+                sh "sed -i 's|topic-friends/thesis-recommend:.*|${tag}|' ./kubernetes/test/flask-deployment.yaml"
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                   sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                 }
