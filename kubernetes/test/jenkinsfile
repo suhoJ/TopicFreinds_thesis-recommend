@@ -43,8 +43,8 @@ pipeline {
             node(POD_LABEL) {
               container('docker-build-push') {
                 checkout scm
-                def imageName = "leesy010504/flask-test"
-                sh "sed -i 's|leesy010504/flask-test:.*|${tag}|' ./flask-example-deploy/deployment.yaml"
+                def imageName = "topic-friends/thesis-recommend"
+                sh "sed -i 's|topic-friends/thesis-recommend:.*|${tag}|' ./deployment.yaml"
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                   sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                 }
@@ -56,7 +56,7 @@ pipeline {
         }
       }
     }
-    stage('Commit and Push Changes') {
+    stage('Git Commit and Push Changes') {
       steps {
         script {
           sh '''

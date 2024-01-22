@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: suhoj/kubernetes-flask-test:latest
+          image: topic-friends/thesis-recommend:latest
           ports:
             - containerPort: 5000
           resources:
