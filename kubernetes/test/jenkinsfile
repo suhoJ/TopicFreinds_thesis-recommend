@@ -44,7 +44,7 @@ pipeline {
                 args: [99d]
           ''') {
             node(POD_LABEL) {
-              container('docker-build-push') {
+              container('docker') {
                 checkout scm
                 def imageName = "topic-friends/thesis-recommend"
                 sh "sed -i 's|topic-friends/thesis-recommend:.*|${tag}|' ./deployment.yaml"
