@@ -1,0 +1,10 @@
+controller:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: "env"
+            operator: In
+            values:
+            - "dev"
