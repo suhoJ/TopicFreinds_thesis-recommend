@@ -32,7 +32,7 @@ pipeline {
                 limits:
                   memory: "2Gi"
                   cpu: "2000m"
-				command: [sleep]
+                command: [sleep]
                 args: [99d]
                 volumeMounts:
                   - name: docker-socket
@@ -45,7 +45,7 @@ pipeline {
                 limits:
                   memory: "2Gi"
                   cpu: "2000m"
-				securityContext:
+                securityContext:
                   privileged: true
                 volumeMounts:
                   - name: docker-socket
