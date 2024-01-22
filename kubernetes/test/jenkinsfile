@@ -26,12 +26,6 @@ pipeline {
             containers:
               - name: docker
                 image: docker:19.03-dind
-                requests:
-                  memory: "1Gi"
-                  cpu: "1000m"
-                limits:
-                  memory: "2Gi"
-                  cpu: "2000m"
                 command: [sleep]
                 args: [99d]
                 volumeMounts:
@@ -39,12 +33,6 @@ pipeline {
                     mountPath: /var/run
               - name: docker-daemon
                 image: docker:19.03-dind
-                requests:
-                  memory: "1Gi"
-                  cpu: "1000m"
-                limits:
-                  memory: "2Gi"
-                  cpu: "2000m"
                 securityContext:
                   privileged: true
                 volumeMounts:
