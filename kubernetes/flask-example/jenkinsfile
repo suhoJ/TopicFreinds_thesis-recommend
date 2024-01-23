@@ -59,19 +59,5 @@ pipeline {
         }
       }
     }
-
-    stage('Commit and Push Changes') {
-      steps {
-        script {
-          sh '''
-            git config user.email "leesy010504@gmail.com"
-            git config user.name "leesy010504"
-            git add .
-            git commit -m "Update deployment to ${env.BUILD_NUMBER}"
-            git push origin master
-          '''
-        }
-      }
-    }
   }
 }
