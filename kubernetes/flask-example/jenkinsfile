@@ -47,7 +47,7 @@ pipeline {
               container('docker') {
                 checkout scm
                 def imageName = "leesy010504/flask-test"
-                sh "sed -i 's|leesy010504/flask-test:.*|${tag}|' ./flask-example-deploy/deployment.yaml"
+                sh "sed -i 's|leesy010504/flask-test:.*|${tag}|' ./kubernetes/flask-example-deploy/deployment.yaml"
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                   sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                 }
