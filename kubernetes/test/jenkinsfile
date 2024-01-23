@@ -25,14 +25,14 @@ pipeline {
                 emptyDir: {}
             containers:
               - name: docker
-                image: docker:19.03-dind
+                image: desmart/dind:latest
                 command: [sleep]
                 args: [99d]
                 volumeMounts:
                   - name: docker-socket
                     mountPath: /var/run
               - name: docker-daemon
-                image: docker:19.03-dind
+                image: desmart/dind:latest
                 securityContext:
                   privileged: true
                 volumeMounts:
