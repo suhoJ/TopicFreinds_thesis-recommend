@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: flask
+  name: flask
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: flask
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: flask
+    spec:
+      containers:
+      - image: gasbugs21c/my-flask-app
+        name: flask-example
