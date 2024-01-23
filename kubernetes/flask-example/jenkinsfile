@@ -1,14 +1,17 @@
 pipeline {
   agent any
+
+  environment {
+    tag = "${env.BUILD_NUMBER}"
+  }
+
   stages {
     stage('Checkout') {
       steps {
         checkout scm
       }
     }
-    environment {
-      tag = "${env.BUILD_NUMBER}"
-    }
+
     stage('Docker pod deploy') {
       steps {
         script {
@@ -56,6 +59,7 @@ pipeline {
         }
       }
     }
+
     stage('Commit and Push Changes') {
       steps {
         script {
