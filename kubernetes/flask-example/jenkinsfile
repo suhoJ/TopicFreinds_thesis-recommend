@@ -44,7 +44,7 @@ pipeline {
                   args: [99d]
           ''') {
             node(POD_LABEL) {
-              container('docker-build-push') {
+              container('docker') {
                 checkout scm
                 def imageName = "leesy010504/flask-test"
                 sh "sed -i 's|leesy010504/flask-test:.*|${tag}|' ./flask-example-deploy/deployment.yaml"
