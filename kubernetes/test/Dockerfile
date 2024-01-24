@@ -1,10 +1,8 @@
 # Use an official lightweight Python image
-FROM python:3.9
+FROM python:3.9-buster
 
 # Set the working directory in the container
 WORKDIR /app
-
-RUN pip install --upgrade pip
 
 # Copy the dependencies file to the working directory
 COPY requirements.txt .
