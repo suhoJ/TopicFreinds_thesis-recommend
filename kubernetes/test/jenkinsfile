@@ -29,7 +29,7 @@ pipeline {
                 command: [sleep]
                 args: [99d]
                 volumeMounts:
-                  - name: docker-socket
+                  - name: docker-socket"
                     mountPath: /var/run
               - name: docker-daemon
                 image: docker:19.03-dind
@@ -46,8 +46,8 @@ pipeline {
             node(POD_LABEL) {
               container('docker') {
                 checkout scm
-                def imageName = "topic-friends/thesis-recommend"
-                sh "sed -i 's|topic-friends/thesis-recommend:.*|${tag}|' ./kubernetes/test/flask-deployment.yaml"
+                def imageName = "leesy010504/thesis-recommend"
+                sh "sed -i 's|leesy010504/thesis-recommend:.*|${tag}|' ./kubernetes/test/flask-deployment.yaml"
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                   sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                 }
