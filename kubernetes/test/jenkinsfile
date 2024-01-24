@@ -29,7 +29,7 @@ pipeline {
                 command: [sleep]
                 args: [99d]
                 volumeMounts:
-                  - name: docker-socket"
+                  - name: docker-socket
                     mountPath: /var/run
               - name: docker-daemon
                 image: docker:19.03-dind
