@@ -1,3 +1,5 @@
+from konlpy.tag import Mecab
+
 class CustomTokenizer:
     def __init__(self, tagger):
         self.tagger = tagger
