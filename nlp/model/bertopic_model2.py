@@ -27,4 +27,10 @@ def apply_category_models(df, tokenizer):
         model = modeler.fit_model(category_docs)
         category_models[category] = model
 
-    return category_models
+        # 각 카테고리별 주요 키워드 추출
+        topic_info = model.get_topic_info()
+        top_topics = topic_info[topic_info['Name'] != '-1']  # -1은 노이즈를 나타내므로 제외
+        keywords = ["; ".join(model.get_topic(topic)[0]) for topic in top_topics['Topic']]
+        category_keywords[category] = keywords
+        
+    return category_models, category_keywords
