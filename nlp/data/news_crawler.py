@@ -10,22 +10,21 @@ import logging
 import requests
 import mysql.connector
 
-# 로깅 설정
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def create_db():
     db_config = {
-        'host': 'host',
-        'user': 'user',
-        'password': 'pass',
-        'database': 'database'
+        'host': "localhost",
+        'user': "root",
+        'password': "password",
+        'database': "news_db"
     }
     conn = mysql.connector.connect(**db_config)
     cur = conn.cursor()
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS news_crawl(
-      date TEXT,
+      date TEXT,                         
       category TEXT,
       press TEXT,
       title TEXT,
@@ -36,25 +35,31 @@ def create_db():
     conn.commit()
     return conn
 
-def insert_article(article, conn):
+def insert_article(article):
+    db_config = {
+        'host': "localhost",
+        'user': "root",
+        'password': "password",
+        'database': "news_db"
+    }
+    conn = mysql.connector.connect(**db_config)
     cur = conn.cursor()
+
     try:
-        # Use %s instead of ? for MySQL
         cur.execute("SELECT 1 FROM news_crawl WHERE link = %s", (article['link'],))
         if cur.fetchone():
             return  # Article already exists, skip insertion
 
-        # Use %s instead of ? for MySQL
         cur.execute("""
                 INSERT INTO news_crawl (date, category, press, title, document, link)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (
-        article['date'],
-        article['category'],
-        article['press'],
-        article['title'],
-        article['document'],
-        article['link']))
+            article['date'],
+            article['category'],
+            article['press'],
+            article['title'],
+            article['document'],
+            article['link']))
         conn.commit()
     except mysql.connector.Error as e:  # Handle MySQL exceptions
         print(f"Database error: {e}")
@@ -62,6 +67,7 @@ def insert_article(article, conn):
         print(f"Exception in insert_article: {e}")
     finally:
         cur.close()  # Close the cursor
+        conn.close()
 
 category_mapping = {
     100 : "Politics",
@@ -101,32 +107,32 @@ def news_crawler(start_date, end_date, conn):
                 browser.get(f"https://news.naver.com/breakingnews/section/{category_num}/{subcategory}?date={current_date}")
                 soup = BeautifulSoup(browser.page_source, "html.parser")
                 time.sleep(3)
-                # 웹페이지에 들어왔으면, "기사 더보기" 클릭 ("기사 더보기" 버튼이 안보일 때까지)
+                # If on the webpage, click the "Read More" button until it's no longer visible
                 while True:
                     try:
                         browser.find_element(By.CSS_SELECTOR, "div.section_more > a").click()
                         time.sleep(0.5)
 
-                        # 업데이트된 페이지 소스를 soup 객체로 파싱
+                        # Parse the updated page source into a BeautifulSoup object
                         soup = BeautifulSoup(browser.page_source, "html.parser")
 
-                    except:  # "기사 더보기" 버튼이 안보이면, 위 문장에서 에러가 나므로,
-                        # 페이지 끝까지 스크롤
+                    except:  # If the "Read More" button is not visible, an error will be thrown,
+                        # Scroll to the bottom of the page
                         browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                         time.sleep(0.3)
-                        break  # 반복문 탈출
+                        break  
 
                 articles = soup.select("div.sa_text")
-                # 기사가 없으면 중단
+                # Stop if there are no articles
                 if not articles:
                     break
 
-                # 각 기사의 페이지링크 추출
+                # Extract links for each article
                 links = [article.select_one("div.sa_text > a")['href'] for article in articles]
                 # print(links)
                 link_data = [(link, category, conn) for link in links]
 
-                # 각 링크에 대한 데이터 추출(멀티스레딩)
+                # Extract data for each link (multithreading)
                 with ThreadPoolExecutor(max_workers=100) as executor:
                     results = list(executor.map(extract_article, link_data))
 
@@ -135,7 +141,7 @@ def news_crawler(start_date, end_date, conn):
                 for result in results:
                     print(result)
 
-                current_date += 1  # 다음 날짜로 이동
+                current_date += 1  # Move to the next date
 
     browser.quit()
     return all_articles
@@ -146,19 +152,17 @@ def extract_article(link_data):
         response = requests.get(link)
         article_soup = BeautifulSoup(response.content, "html.parser")
         # time.sleep(3)
-        # 날짜 추출
+        # Extract date
         date = article_soup.select_one("span.media_end_head_info_datestamp_time._ARTICLE_DATE_TIME")
         date = date.get_text(strip=True)
-        # 언론사 추출
+        # Extract press
         press = article_soup.find("em", class_="media_end_linked_more_point").get_text(strip=True)
-        # 제목 추출
+        # Extract title
         title = article_soup.select_one("#title_area").get_text(strip=True)
-        # 이미지 추출
-        # image = article_soup.find('img', id='img1')['src']
-        # 본문 추출
+        # Extract content
         content_raw = article_soup.select_one("article#dic_area") or article_soup.select_one("div#articleBody")
         if content_raw:
-            #불필요한 태그 제거
+            # Remove unnecessary tags
             tags_to_remove = content_raw.select("div[style], em.img_desc, em[style], table.nbd_table, span.end_photo_org, div.vod_player_wrap, span.byline_s")
             for tag in tags_to_remove:
                 tag.decompose()
@@ -179,20 +183,18 @@ def extract_article(link_data):
                 'document': content,
                 'link': link
             }
-            insert_article(article_data, conn)
+            insert_article(article_data)
             return article_data
     except Exception as e:
             return {"link": link, "error": str(e)}
-    finally:
-           conn.close()
 
 def start_crawling(start_date, end_date):
     start_time = time.time()
     try:
         conn = create_db()
         articles = news_crawler(start_date, end_date, conn) 
-        end_time = time.time() 
-        print(f"크롤링 완료. 소요 시간: {end_time - start_time}초")
+        end_time = time.time()  
+        print(f"Finish crawling : {end_time - start_time}초")
         print(f"{len(articles)} articles saved")
     except Exception as e:
         logging.error(f"An error occurred: {e}")
