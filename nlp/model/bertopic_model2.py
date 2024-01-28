@@ -21,7 +21,8 @@ class CategoryBERTopicModeler:
 def apply_category_models(df, tokenizer):
     modeler = CategoryBERTopicModeler(tokenizer)
     category_models = {}
-
+    category_keywords = {}
+    
     for category in df['category'].unique():
         category_docs = df[df['category'] == category]['tokenized_text_mc']
         model = modeler.fit_model(category_docs)
