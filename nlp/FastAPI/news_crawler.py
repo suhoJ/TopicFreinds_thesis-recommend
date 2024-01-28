@@ -104,6 +104,7 @@ def news_crawler(start_date, end_date, conn):
             current_date = original_start_date
 
             while current_date <= end_date:
+                logging.info(f"Crawling category {category}, subcategory {subcategory}, date {current_date}")
                 browser.get(f"https://news.naver.com/breakingnews/section/{category_num}/{subcategory}?date={current_date}")
                 soup = BeautifulSoup(browser.page_source, "html.parser")
                 time.sleep(3)
