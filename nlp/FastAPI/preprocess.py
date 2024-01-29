@@ -68,7 +68,7 @@ class DataProcessor:
                     except Exception as e:
                         print(f"Error inserting record: {e}")
 
-    def preprocess_data(self, start_date, end_date):  # 사용자가 날짜 선택하면 해당 날짜만큼만 실행시키도록 함
+    def preprocess_data(self, start_date, end_date):  # 추가 : 사용자가 날짜 선택하면 해당 날짜만큼만 실행시키도록 함
         query = "SELECT * FROM news_crawl WHERE date >= :start_date AND date <= :end_date"
         df = pd.read_sql_query(sql=query, con=self.engine, params={'start_date': start_date, 'end_date': end_date})
         df = df.drop_duplicates(subset="document")
