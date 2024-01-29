@@ -23,7 +23,7 @@ app = FastAPI()
 async def modeling():
     try:
         df = pd.read_sql('SELECT * FROM preprocessed_news', engine)
-        topic_modeler = TopicModeler(topic_number=10, topn=5, data=df)
+        topic_modeler = TopicModeler(tokenizer)
         return {"status": "success", "message": "Topic modeling completed."}
     except Exception as e:
         logging.error(f"An error occurred in the modeling route: {e}")
