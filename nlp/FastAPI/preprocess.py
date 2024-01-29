@@ -39,17 +39,20 @@ class DataProcessor:
         self.engine = engine
         self.preprocessed_news_data = None
         self.mecab = Mecab() 
-        self.stopwords = ['에게', '통해', '각각', '때문', '무단', '따른', '금지', '기자', '는데', '저작', '뉴스', '특파원', '하다']
-        self.correction_dict = {'친환': '친환경', '열사': '계열사', '제화': '법제화'}
+        self.stopwords = ['에게', '통해', '각각', '때문', '무단', '따른', '기자', '는데', '저작', '뉴스', '특파원', '하다', '이번', '이상',
+             '전년', '제품', '업체', '기업', '지난해', '대비', '올해', '의원', '내년도', '절반', '당기', '대표', '만나', '분기',
+             '국민', '정부', '지역', '현수막', '비중', '포토', 'vs', '파렴치','오전', '오후','정보', '이날', '상품', '세계',
+             '시장', '경제', '과학', '사회', '문화', '정치', '생활', '처음', '가능', '매출', '소재', '작품', '자신', '위치', 'KB',
+             '수준', '라이프', '여파', '해석', '고객', '국내']
 
     def filter_word(self, text):
-        raw_pos_tagged = self.mecab.pos(text)
-        word_cleaned = []
-        for word, tag in raw_pos_tagged:
-            corrected_word = self.correction_dict.get(word, word)
-            if tag in ['NNG', 'NNP', "SL"] and len(corrected_word) != 1 and corrected_word not in self.stopwords:
-                word_cleaned.append(corrected_word)
-        return word_cleaned
+        sent = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
+        raw_pos_tagged = self.mecab.pos(sent)
+        result = [word for word, tag in raw_pos_tagged
+                  if len(word) > 1 and
+                  (word not in self.stopwords) and
+                  (tag in ['NNG', "SL"])]
+        return result
 
     def create_table(self):
         Base.metadata.create_all(self.engine)
@@ -65,9 +68,9 @@ class DataProcessor:
                     except Exception as e:
                         print(f"Error inserting record: {e}")
 
-    def preprocess_data(self):
-        query = "SELECT * FROM news_crawl"
-        df = pd.read_sql_query(query, self.engine)
+    def preprocess_data(self, start_date, end_date):  # 사용자가 날짜 선택하면 해당 날짜만큼만 실행시키도록 함
+        query = "SELECT * FROM news_crawl WHERE date >= :start_date AND date <= :end_date"
+        df = pd.read_sql_query(sql=query, con=self.engine, params={'start_date': start_date, 'end_date': end_date})
         df = df.drop_duplicates(subset="document")
         df = df.dropna()
         df["title"] = df["title"].apply(process_text)
