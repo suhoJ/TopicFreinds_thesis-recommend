@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 # from news_crawler import start_crawling
 from preprocess import DataProcessor
-from bertopic_model import TopicModeler
+from bertopic_model import TopicModeler, apply_category_models
 # from KCI_Search_API import get_api
 import pandas as pd
 import sqlalchemy
