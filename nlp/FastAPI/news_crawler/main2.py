@@ -7,7 +7,7 @@ import pandas as pd
 import sqlalchemy
 import logging
 import datetime
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 # Update this with your MySQL RDS credentials
 db_username = "goorm"
@@ -24,8 +24,8 @@ app = FastAPI()
 @app.get("/start-crawling")
 async def crawling():
     try:
-        # start_crawling(20231207, 20231207)
-        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        # start_crawling(20231206, 20231206)  # 크롤링 확인 할 때만 사용
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)   # 추가: 날짜 설정
         date_str = yesterday.strftime("%Y%m%d")
         await start_crawling(date_str, date_str)
         return {"status": "success", "message": "News crawling started."}
@@ -39,9 +39,8 @@ async def home():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
-    # 스케줄러 설정
-    scheduler = BackgroundScheduler()
+    # 추가 : 스케줄러 설정
+    scheduler = AsyncIOScheduler()
     scheduler.add_job(crawling, 'cron', hour=0)  # 매일 자정에 실행
     scheduler.start()           #'interval', hours=1 로 변경시 매 1시간마다 크롤링
-    uvicorn.run(app, host="127.0.0.1", port=5000, log_level="info")
+    uvicorn.run(app, host="127.0.0.1", port=8001, log_level="info")
