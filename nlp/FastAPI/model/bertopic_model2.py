@@ -20,7 +20,7 @@ class TopicModeler:   # 기존 클래스명과 동일하게 이름 수정
         return topic_model
 
 def apply_category_models(df, tokenizer):
-    modeler = CategoryBERTopicModeler(tokenizer)
+    modeler = TopicModeler(DataProcessor.filter_word)
     category_models = {}
     category_keywords = {}  
 
