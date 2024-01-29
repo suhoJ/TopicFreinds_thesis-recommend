@@ -7,7 +7,6 @@ import requests
 import time
 import re
 import logging
-import uuid
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 from concurrent.futures import ThreadPoolExecutor
@@ -64,23 +63,6 @@ def create_db(engine):
     except SQLAlchemyError as e:
         logging.error(f"Error creating the table: {e}")
 
-
-# def insert_article(article, engine):
-#     with engine.connect() as conn:
-#         try:
-#             result = conn.execute(text("SELECT 1 FROM news_crawl WHERE link = :link"), {'link': article['link']})
-#             if result.fetchone():
-#                 logging.info(f"Article already exists: {article['title']}")
-#                 return
-
-#             conn.execute(text("""
-#                 INSERT INTO news_crawl (date, category, press, title, document, link)
-#                 VALUES (:date, :category, :press, :title, :document, :link)
-#             """), article)
-
-#             logging.info(f"Article inserted: {article['title']}")
-#         except SQLAlchemyError as e:
-#             logging.error(f"Error in insert_article: {e}")
 def insert_article(article, engine):
     with engine.connect() as conn:
         try:
@@ -140,27 +122,27 @@ def news_crawler(start_date, end_date):
                         browser.find_element(By.CSS_SELECTOR, "div.section_more > a").click()
                         time.sleep(0.5)
 
-                        # 업데이트된 페이지 소스를 soup 객체로 파싱
+                        # Parse the updated page source into a BeautifulSoup object
                         soup = BeautifulSoup(browser.page_source, "html.parser")
 
-                    except:  # "기사 더보기" 버튼이 안보이면, 위 문장에서 에러가 나므로,
-                        # 페이지 끝까지 스크롤
+                    except:  # If the "Read More" button is not visible, an error will be thrown,
+                        # Scroll to the bottom of the page
                         browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                         time.sleep(0.3)
-                        break  # 반복문 탈출
+                        break  
 
                 articles = soup.select("div.sa_text")
-                # 기사가 없으면 중단
+                # Stop if there are no articles
                 if not articles:
                     break
 
 
-                # 각 기사의 페이지링크 추출
+                # Extract links for each article
                 links = [article.select_one("div.sa_text > a")['href'] for article in articles]
                 # print(links)
                 link_data = [(link, category) for link in links]
 
-                # 각 링크에 대한 데이터 추출(멀티스레딩)
+                # Extract data for each link (multithreading)
                 with ThreadPoolExecutor(max_workers=100) as executor:
                     results = list(executor.map(extract_article, link_data))
 
@@ -169,43 +151,11 @@ def news_crawler(start_date, end_date):
                 for result in results:
                     print(result)
 
-                current_date += 1  # 다음 날짜로 이동
+                current_date += 1  # Move to the next date
 
     browser.quit()
     return all_articles
 
-# def extract_article(data):
-#     link, category = data
-#     try:
-#         response = requests.get(link, headers=headers)
-#         article_soup = BeautifulSoup(response.content, "html.parser")
-        
-#         # Extraction logic based on the website's HTML structure
-#         date = article_soup.select_one("span.media_end_head_info_datestamp_time._ARTICLE_DATE_TIME").get_text(strip=True)
-#         press = article_soup.select_one("your_press_selector").get_text(strip=True)
-#         title = article_soup.select_one("your_title_selector").get_text(strip=True)
-#         content_raw = article_soup.select_one("your_content_selector")
-
-#         if content_raw:
-#             # Cleaning and processing the content
-#             content = content_raw.get_text(strip=True)
-
-#             article_data = {
-#                 'date': date,
-#                 'category': category,
-#                 'press': press,
-#                 'title': title,
-#                 'document': content,
-#                 'link': link,
-#                 'uuid': str(uuid.uuid4())
-#             }
-
-#             insert_article(article_data, engine)
-#             return article_data
-
-#     except Exception as e:
-#         logging.error(f"Error in extract_article: {e}")
-#         return {"link": link, "error": str(e)}
 def extract_article(link_data):
     link, category = link_data
     try:
@@ -250,8 +200,6 @@ def extract_article(link_data):
     except Exception as e:
         return {"link": link, "error": str(e)}
 
-
-
 def start_crawling(start_date, end_date):
     logging.info(f"Starting crawling from {start_date} to {end_date}")
     start_time = time.time()
@@ -265,4 +213,4 @@ def start_crawling(start_date, end_date):
         logging.error(f"An error occurred: {e}")
 
 # if __name__ == "__main__":
-#     start_crawling(20231201, 20231202)  # Example start and end dates
+#     start_crawling(20231202, 20231202)  # Example start and end dates
