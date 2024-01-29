@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 # from news_crawler import start_crawling
-# from preprocess import DataProcessor
+from preprocess import DataProcessor
 from bertopic_model import TopicModeler
 # from KCI_Search_API import get_api
 import pandas as pd
@@ -23,7 +23,8 @@ app = FastAPI()
 async def modeling():
     try:
         df = pd.read_sql('SELECT * FROM preprocessed_news', engine)
-        topic_modeler = TopicModeler(tokenizer)
+        topic_modeler = TopicModeler(DataProcessor.filter_word)                   # 추가: bertopic으로 키워드 반환되게 수정.
+        category_models, category_keywords = apply_category_models(df)
         return {"status": "success", "message": "Topic modeling completed."}
     except Exception as e:
         logging.error(f"An error occurred in the modeling route: {e}")
