@@ -47,7 +47,7 @@ class DataProcessor:
         self.correction_dict = {'친환': '친환경', '열사': '계열사', '제화': '법제화'}
 
     def filter_word(self, text):
-        text = text[:1000000]
+        # text = text[:1000000]
         raw_pos_tagged = self.mecab.pos(text)
         word_cleaned = []
         for word, tag in raw_pos_tagged:
@@ -75,9 +75,9 @@ class DataProcessor:
         df = pd.read_sql_query(query, self.engine)
         df = df.drop_duplicates(subset="document")
         df = df.dropna()
-        df["title"] = df["title"].apply(self.process_text)
-        df["title"] = df["title"].apply(self.process_title)
-        df["document"] = df["document"].apply(self.process_text)
+        df["title"] = df["title"].apply(process_text)
+        df["title"] = df["title"].apply(process_title)
+        df["document"] = df["document"].apply(process_text)
 
         # Combine title and document for tokenization
         df["text"] = df["title"] + " " + df["document"]
