@@ -9,6 +9,7 @@ from bertopic_model import TopicModeler
 from bertopic_model import apply_category_models
 from konlpy.tag import Mecab
 from eunjeon import Mecab  # mecab 둘 중 하나 되는걸로 import
+from sqlalchemy.ext.declarative import declarative_base
 
 # Update this with your MySQL RDS credentials
 db_username = "goorm"
@@ -23,7 +24,8 @@ engine = sqlalchemy.create_engine(mysql_connection_string)
 app = FastAPI()
 mecab = Mecab()
 
-class TextData(BaseModel):
+Base = declarative_base()
+class TextData(Base):
     text: str
     category: str
 
