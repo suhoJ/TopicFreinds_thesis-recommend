@@ -35,10 +35,10 @@ def process_title(title):
     return title_pattern.sub("", title)
 
 class DataProcessor:
-    def __init__(self, engine, n=2):
+    def __init__(self, tagger, engine, n=2):
         self.engine = engine
         self.n = n
-        self.mecab = Mecab() 
+        self.tagger = tagger
         self.preprocessed_news_data = None
         self.stopwords = ['에게', '통해', '각각', '때문', '무단', '따른', '기자', '는데', '저작', '뉴스', '특파원', '하다', '이번', '이상',
              '전년', '제품', '업체', '기업', '지난해', '대비', '올해', '의원', '내년도', '절반', '당기', '대표', '만나', '분기',
@@ -47,9 +47,9 @@ class DataProcessor:
              '수준', '라이프', '여파', '해석', '고객', '국내', '관련', '내년', 'gb gb', '주요']   # 계속 변동 예정
         self.correction_dict = {'lg' : '엘지', '중신' : '중신용', 'rd': 'R&D', '생활건강': '엘지생활건강', '예술전당': '예술의전당', '엘지생활':'엘지생활건강'}
         
-   def filter_word(self, text):
+   def __call__(self, text):
         text = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
-        raw_pos_tagged = self.mecab.pos(text)
+        raw_pos_tagged = self.tagger.pos(text)
         word_cleaned = []
         for word, tag in raw_pos_tagged:
             if tag in ['NNG', "SL"] and (len(word) != 1) and (word not in self.stopwords):
@@ -95,7 +95,7 @@ class DataProcessor:
         df["text"] = df["title"] + " " + df["document"]
 
         # Apply tokenization and ensure tokenized_text_mc is created
-        df["tokenized_text_mc"] = df["text"].apply(self.filter_word)
+        df["tokenized_text_mc"] = df["text"].apply(self.DataProcessor)
 
         # Debugging: Print DataFrame and columns
         print("DataFrame after tokenization:")
