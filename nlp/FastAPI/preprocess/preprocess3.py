@@ -47,7 +47,7 @@ class DataProcessor:
              '수준', '라이프', '여파', '해석', '고객', '국내', '관련', '내년', 'gb gb', '주요']   # 계속 변동 예정
         self.correction_dict = {'lg' : '엘지', '중신' : '중신용', 'rd': 'R&D', '생활건강': '엘지생활건강', '예술전당': '예술의전당'}
         
-   def __call__(self, sent):
+   def filter_word(self, sent):
         sent = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
         raw_pos_tagged = self.mecab.pos(sent)
         word_cleaned = []
