@@ -60,7 +60,7 @@ def apply_category_models(df, tokenizer):
     category_keywords = {}
 
     for category in df['category'].unique():
-        category_docs = df[df['category'] == category]['tokenized_text_mc'].apply(lambda x: ' '.join(x))
+        category_docs = df[df['category'] == category]['text'].apply(lambda x: ' '.join(x))
         model = modeler.fit_model(category_docs)
         category_models[category] = model
 
