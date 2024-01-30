@@ -33,7 +33,7 @@ class TopicModeler:
                 top_keywords.append((topic_number, top_keyword))
         return top_keywords
 
-    def create_wordcloud(self, all_keywords, width=800, height=400)
+    def create_wordcloud(self, all_keywords, width=800, height=400):
         font_path='/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf'                 
         wordcloud = WordCloud(font_path=font_path, width=width, height=height, background_color='white')
         wordcloud.generate_from_frequencies(all_keywords)
