@@ -34,7 +34,7 @@ class TopicModeler:
         return top_keywords
 
     def create_wordcloud(self, all_keywords, width=800, height=400):
-        font_path='/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf'                 
+        font_path='/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf'   # 폰트 경로에 맞게 변경할 것                 
         wordcloud = WordCloud(font_path=font_path, width=width, height=height, background_color='white')
         wordcloud.generate_from_frequencies(all_keywords)
 
