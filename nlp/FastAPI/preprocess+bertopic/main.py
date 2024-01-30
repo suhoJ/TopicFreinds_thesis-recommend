@@ -9,7 +9,11 @@ from bertopic_model import TopicModeler
 from bertopic_model import apply_category_models
 from konlpy.tag import Mecab
 from eunjeon import Mecab  # mecab 둘 중 하나 되는걸로 import
-from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.ext.declarative import declarative_base  #2.0미만 버전
+from sqlalchemy.orm import declarative_base, Mapped  # 2.0이상 버전 - 확인 요망
+from sqlalchemy import Column, String
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Update this with your MySQL RDS credentials
 db_username = "goorm"
@@ -25,9 +29,11 @@ app = FastAPI()
 mecab = Mecab()
 
 Base = declarative_base()
+
 class TextData(Base):
-    text: str
-    category: str
+    __tablename__ = "text_data"
+    text = Column(Mapped[str])
+    category = Column(Mapped[str])
 
 @app.post("/preprocess")
 def preprocess_data(start_date: str = Query(None), end_date: str = Query(None)):
