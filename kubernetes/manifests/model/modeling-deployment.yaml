@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modeling-app-deployment
+spec:
+  # replicas: 1
+  selector:
+    matchLabels:
+      app: modeling-app
+  template:
+    metadata:
+      labels:
+        app: modeling-app
+    spec:
+      containers:
+      - name: modeling-app
+        image: suhoj/thesis-backend-modeling-api:2.0.2
+        ports:
+        - containerPort: 8003
+        resources:
+          limits:
+            memory: "2Gi"  # 2 Gigabytes of memory
+            cpu: "2000m"   # 2 CPUs (2000 millicores)
+          requests:
+            memory: "1Gi"  # 1 Gigabyte of memory
+            cpu: "1000m"   # 1 CPU (1000 millicores)
+      # nodeSelector:
+      #   env: gpu

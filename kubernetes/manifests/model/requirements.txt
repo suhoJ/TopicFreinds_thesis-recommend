@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+mysql-connector-python
+sqlalchemy
+pandas
+BERTopic
+beautifulsoup4
+requests
+importlib-metadata
+# numpy
+# gensim
+scikit-learn
+sentence-transformers
