@@ -26,6 +26,13 @@ FROM python:3.9
 # Set the working directory in the container
 WORKDIR /app
 
+# Add GPG key
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6ED0E7B82643E131 \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F8D2585B8783D481 \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 54404762BBB6E853 \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BDE6D2B9216EC7A8
+
 # Install Google Chrome
 RUN apt-get update && apt-get install -y wget gnupg \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
