@@ -1,0 +1,67 @@
+# Use scatterlab/python-mecab-ko as the base image
+FROM scatterlab/python-mecab-ko
+
+WORKDIR /app
+
+# Install MeCab and related dependencies
+RUN apt-get update && apt-get install -y \
+    g++ \
+    curl \
+    libmecab2 \
+    mecab \
+    mecab-ipadic \
+    mecab-ipadic-utf8 \
+    build-essential \
+    autoconf \
+    automake \
+    libtool \
+    git
+
+# Install MeCab-Ko
+RUN curl -L https://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-0.9.2.tar.gz | tar zxfv - \
+    && cd mecab-0.996-ko-0.9.2 \
+    && ./configure \
+    && make \
+    && make check \
+    && make install \
+    && cd .. \
+    && echo "/usr/local/lib" >> /etc/ld.so.conf \
+    && ldconfig
+
+# Install MeCab-Ko-DIC
+RUN curl -L https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.1.1-20180720.tar.gz | tar zxfv - \
+    && cd mecab-ko-dic-2.1.1-20180720 \
+    && ./autogen.sh \
+    && ./configure \
+    && make \
+    && make install \
+    && cd .. \
+    && ldconfig
+
+# Install MeCab-Python
+RUN git clone https://bitbucket.org/eunjeon/mecab-python-0.996.git \
+    && cd mecab-python-0.996 \
+    && python setup.py build \
+    && python setup.py install \
+    && cd ..
+
+# Clean up
+RUN apt-get clean \
+    && rm -rf mecab-0.996-ko-0.9.2 mecab-ko-dic-2.1.1-20180720 mecab-python-0.996 \
+    && apt-get -y remove g++ build-essential autoconf automake libtool git \
+    && apt-get -y autoremove
+
+# Install additional required packages
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . /app
+
+# Make port 8000 available to the world outside this container
+EXPOSE 8002
+
+# Define environment variable
+ENV NAME World
+# Run app.py when the container launches
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8002"]

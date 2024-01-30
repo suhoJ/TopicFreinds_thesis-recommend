@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: preprocess-app-deployment
+  labels:
+    app: preprocess-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: preprocess-app
+  template:
+    metadata:
+      labels:
+        app: preprocess-app
+    spec:
+      containers:
+      - name: preprocess-app
+        # image: suhoj/thesis-backend-preprocessing:3.1.8
+        image: suhoj/thesis-backend-preprocessing:3.2.1
+        ports:
+        - containerPort: 8002
