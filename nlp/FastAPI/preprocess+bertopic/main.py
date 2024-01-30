@@ -3,6 +3,7 @@ from preprocess import DataProcessor
 import pandas as pd
 import sqlalchemy
 import logging
+from bertopic_model import 
 
 # Update this with your MySQL RDS credentials
 db_username = "goorm"
@@ -16,7 +17,21 @@ engine = sqlalchemy.create_engine(mysql_connection_string)
 
 app = FastAPI()
 
+class TextData(BaseModel):
+    text: str
+    category: str
 
+@app.post("/analyze/")
+async def analyze_text(data: TextData):
+    # 데이터를 DataFrame으로 변환
+    df = pd.DataFrame([data.dict()])
+
+    # 토픽 모델링 수행
+    try:
+        models = train_topic_model(df)
+        return models
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/")
 async def home():
