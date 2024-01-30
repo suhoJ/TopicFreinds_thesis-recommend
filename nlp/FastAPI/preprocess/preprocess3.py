@@ -35,11 +35,11 @@ def process_title(title):
     return title_pattern.sub("", title)
 
 class DataProcessor:
-    def __init__(self, n=2, engine):
+    def __init__(self, engine, n=2):
         self.engine = engine
-        self.preprocessed_news_data = None
-        self.mecab = Mecab() 
         self.n = n
+        self.mecab = Mecab() 
+        self.preprocessed_news_data = None
         self.stopwords = ['에게', '통해', '각각', '때문', '무단', '따른', '기자', '는데', '저작', '뉴스', '특파원', '하다', '이번', '이상',
              '전년', '제품', '업체', '기업', '지난해', '대비', '올해', '의원', '내년도', '절반', '당기', '대표', '만나', '분기',
              '국민', '정부', '지역', '현수막', '비중', '포토', 'vs', '파렴치','오전', '오후','정보', '이날', '상품', '세계',
