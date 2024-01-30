@@ -3,6 +3,7 @@ import preprocess
 import pandas as pd
 import sqlalchemy
 import logging
+import preprocess
 from tokenizer import DataProcessor
 from bertopic_model import TopicModeler
 from konlpy.tag import Mecab
