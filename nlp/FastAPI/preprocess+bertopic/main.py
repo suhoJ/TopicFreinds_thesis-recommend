@@ -26,7 +26,7 @@ def preprocess_data(start_date: str = Query(None), end_date: str = Query(None)):
     if not start_date or not end_date:
         raise HTTPException(status_code=400, detail="Start date and end date must be provided")
 
-    data_processor = DataProcessor(engine=engine)  # DataProcessor 인스턴스 생성
+    data_processor = DataProcessor(engine=engine, tagger, n=2)  # DataProcessor 인스턴스 생성
     # preprocessed_data = data_processor.preprocess_data(start_date, end_date)  # 전처리 메서드 호출
     preprocessed_data = data_processor.preprocess_data(20231201, 20231201)    # 테스트용
     return {"message": "Data preprocessed successfully", "data": preprocessed_data}
