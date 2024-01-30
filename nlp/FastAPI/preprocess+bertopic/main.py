@@ -8,6 +8,7 @@ from tokenizer import DataProcessor
 from bertopic_model import TopicModeler
 from bertopic_model import apply_category_models
 from konlpy.tag import Mecab
+from eunjeon import Mecab  # mecab 둘 중 하나 되는걸로 import
 
 # Update this with your MySQL RDS credentials
 db_username = "goorm"
