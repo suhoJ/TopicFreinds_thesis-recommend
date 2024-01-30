@@ -25,3 +25,22 @@ class TopicModeler:   # 기존 클래스명과 동일하게 이름 수정
                                verbose=True)
         topics, _ = topic_model.fit_transform(docs)
         return topic_model
+
+def apply_category_models(df, tokenizer):
+    modeler = TopicModeler(tokenizer.filter_word)
+    category_models = {}
+    category_keywords = {}
+
+    for category in df['category'].unique():
+        category_docs = df[df['category'] == category]['tokenized_text_mc'].apply(lambda x: ' '.join(x))
+        model = modeler.fit_model(category_docs)
+        category_models[category] = model
+
+        # 각 카테고리별 주요 키워드 추출
+        keywords = modeler.get_top_ctfidf_keywords(category_docs, n=10)  # 상위 10개 단어
+        category_keywords[category] = keywords
+
+        # 워드 클라우드 생성
+        modeler.create_wordcloud(model, category)
+
+    return category_models, category_keywords
