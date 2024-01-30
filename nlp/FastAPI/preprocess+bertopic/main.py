@@ -3,7 +3,7 @@ from preprocess import DataProcessor
 import pandas as pd
 import sqlalchemy
 import logging
-from bertopic_model import 
+from bertopic_model import TopicModel
 
 # Update this with your MySQL RDS credentials
 db_username = "goorm"
