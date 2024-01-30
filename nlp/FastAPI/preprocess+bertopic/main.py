@@ -42,10 +42,9 @@ def preprocess_data(start_date: str = Query(None), end_date: str = Query(None)):
     # TopicModeler 인스턴스 생성, 이 때 tokenizer로 data_processor를 넘겨줌, bertopic자체에서 토큰화 진행됨. db 저장하려면 모델 다 돌리고 저장해야함.
     topic_modeler = TopicModeler(dataprocessor=data_processor, max_features=3000)
 
-    # 'text' 열의 데이터를 fit_model에 입력
-    topic_model = topic_modeler.fit_model(df['text'])
-    
-    return {"message": "Data preprocessed successfully", "model": topic_model}
+    # 각 카테고리별로 주요 키워드와 워드클라우드 생성
+    category_models, category_top_keywords, category_wordclouds = apply_category_models(df, topic_modeler)
+    return {"message": "Data preprocessed successfully", "models": category_models, "top_keywords": category_top_keywords, "wordclouds": category_wordclouds}
 
 
 @app.get("/")
