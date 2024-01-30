@@ -47,11 +47,11 @@ pipeline {
               container('docker') {
                 checkout scm
                 def imageName = "leesy010504/news-crawler"
-                sh "sed -i 's|leesy010504/news-crawer:.*|${tag}|' ./kubernetes/manifests/crawler-deployment.yaml"
+                sh "sed -i 's|leesy010504/news-crawler:.*|${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml"
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                   sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                 }
-                sh "docker build -t ${imageName}:${tag} ./kubernetes/manifests"
+                sh "docker build -t ${imageName}:${tag} ./kubernetes/manifests/news_crawler"
                 sh "docker push ${imageName}:${tag}"
               }
             }
