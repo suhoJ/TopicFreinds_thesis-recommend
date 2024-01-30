@@ -10,7 +10,7 @@ import base64
 from io import BytesIO
 from preprocess import DataProcessor
 
-class TopicModeler:   # 기존 클래스명과 동일하게 이름 수정
+class TopicModeler:   
     def __init__(self, tokenizer, max_features=3000):
         self.vectorizer = CountVectorizer(tokenizer=DataProcessor.filter_word, max_features=max_features)
         self.ctfidf_model = ClassTfidfTransformer()
@@ -27,7 +27,7 @@ class TopicModeler:   # 기존 클래스명과 동일하게 이름 수정
         return topic_model
 
 def apply_category_models(df, tokenizer):
-    modeler = TopicModeler(tokenizer.filter_word)
+    modeler = TopicModeler(tokenizer)
     category_models = {}
     category_keywords = {}
 
