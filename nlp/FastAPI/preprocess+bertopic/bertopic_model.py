@@ -42,7 +42,7 @@ class DataProcessor:
        
 class TopicModeler:
     def __init__(self, tokenizer, max_features=3000):
-        self.vectorizer = CountVectorizer(tokenizer=custom_tokenizer, max_features=max_features)
+        self.vectorizer = CountVectorizer(tokenizer=dataprocessor, max_features=max_features)
         self.ctfidf_model = ClassTfidfTransformer()
 
     def fit_model(self, docs, embedding_model="sentence-transformers/xlm-r-100langs-bert-base-nli-stsb-mean-tokens"):
