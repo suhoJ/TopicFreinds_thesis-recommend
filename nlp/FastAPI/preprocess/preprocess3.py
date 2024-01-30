@@ -48,7 +48,7 @@ class DataProcessor:
         self.correction_dict = {'lg' : '엘지', '중신' : '중신용', 'rd': 'R&D', '생활건강': '엘지생활건강', '예술전당': '예술의전당'}
         
    def filter_word(self, text):
-        textt = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
+        text = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
         raw_pos_tagged = self.mecab.pos(text)
         word_cleaned = []
         for word, tag in raw_pos_tagged:
@@ -87,7 +87,7 @@ class DataProcessor:
         df = pd.read_sql_query(sql=query, con=self.engine, params={'start_date': start_date, 'end_date': end_date})
         df = df.drop_duplicates(subset="document")
         df = df.dropna()
-        df["title"] = df["title"].apply(self.process_text)
+        df["title"] = df["title"].apply(self.process_text)     # 수정 : self 추가
         df["title"] = df["title"].apply(self.process_title)
         df["document"] = df["document"].apply(self.process_text)
 
