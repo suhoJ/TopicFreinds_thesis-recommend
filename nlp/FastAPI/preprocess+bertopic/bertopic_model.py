@@ -45,7 +45,8 @@ class TopicModeler:
 def apply_category_models(df, tokenizer):
     modeler = TopicModeler(tokenizer)
     category_models = {}
-    category_keywords = {}
+    category_top_keywords = {}
+    category_wordclouds = {}
 
     for category in df['category'].unique():
         category_docs = df[df['category'] == category]['text'].apply(lambda x: ' '.join(x))
@@ -53,8 +54,11 @@ def apply_category_models(df, tokenizer):
         category_models[category] = model
 
         # 각 카테고리별 주요 키워드 추출
-        topic_info = model.get_topic_info()
-        top_topics = topic_info[topic_info['Name'] != '-1']  # -1은 노이즈를 나타내므로 제외
-        keywords = [word for word, _ in model.get_topic(top_topics['Topic'][0])]  # 가장 큰 토픽의 키워드
-        category_keywords[category] = keywords
-    return category_models, category_keywords
+        top_keywords = modeler.get_top_keywords(model)
+        # 각 카테고리별 워드클라우드 생성
+        all_keywords = dict([word, freq] for word, freq in model.get_topic(top_keywords[0][0]))
+        wordcloud = modeler.create_wordcloud(all_keywords)
+
+        category_top_keywords[category] = top_keywords
+        category_wordclouds[category] = wordcloud
+    return category_models, category_top_keywords, category_wordclouds
