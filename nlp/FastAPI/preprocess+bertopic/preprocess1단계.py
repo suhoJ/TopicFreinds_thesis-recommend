@@ -15,7 +15,7 @@ class PreprocessedNews(Base):
     id = Column(Integer, primary_key=True)
     title = Column(Text)
     document = Column(LONGTEXT)
-    tokenized_text_mc = Column(LONGTEXT)
+    text = Column(LONGTEXT)
 
 # Regex patterns
 symbol = re.compile(r"^[^\w\d가-힣]+")
@@ -66,8 +66,8 @@ def preprocess_data(self, start_date, end_date):     # 쿼리 추가 - 사용자
     print("DataFrame columns:", df.columns)
     
     # Ensure tokenized_text_mc column exists
-    if 'tokenized_text_mc' not in df.columns:
-        raise Exception("Column 'tokenized_text_mc' not found in DataFrame")
+    if 'text' not in df.columns:
+        raise Exception("Column 'text' not found in DataFrame")
     
     self.preprocessed_news_data = df
     self.create_table()
