@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException
-from preprocess import 
+import preprocess 
 import pandas as pd
 import sqlalchemy
 import logging
-from bertopic_model import TopicModel, DataProcessor
+from tokenizer import DataProcessor
+from bertopic_model import TopicModel
 
 # Update this with your MySQL RDS credentials
 db_username = "goorm"
