@@ -34,8 +34,6 @@ def process_text(row):
 def process_title(title):
     return title_pattern.sub("", title)
 
-
-
 def create_table(self):
     Base.metadata.create_all(self.engine)
 
@@ -62,9 +60,6 @@ def preprocess_data(self, start_date, end_date):     # 쿼리 추가 - 사용자
     # Combine title and document for tokenization
     df["text"] = df["title"] + " " + df["document"]
     
-    # Apply tokenization and ensure tokenized_text_mc is created
-    df["tokenized_text_mc"] = df["text"].apply(self)
-    
     # Debugging: Print DataFrame and columns
     print("DataFrame after tokenization:")
     print(df.head())
@@ -73,9 +68,6 @@ def preprocess_data(self, start_date, end_date):     # 쿼리 추가 - 사용자
     # Ensure tokenized_text_mc column exists
     if 'tokenized_text_mc' not in df.columns:
         raise Exception("Column 'tokenized_text_mc' not found in DataFrame")
-    
-    # Convert 'tokenized_text_mc' list to string
-    df["tokenized_text_mc"] = df["tokenized_text_mc"].apply(lambda x: ' '.join(map(str, x)))
     
     self.preprocessed_news_data = df
     self.create_table()
