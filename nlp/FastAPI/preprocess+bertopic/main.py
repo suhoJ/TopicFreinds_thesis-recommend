@@ -20,6 +20,7 @@ engine = sqlalchemy.create_engine(mysql_connection_string)
 
 app = FastAPI()
 mecab = Mecab()
+
 class TextData(BaseModel):
     text: str
     category: str
