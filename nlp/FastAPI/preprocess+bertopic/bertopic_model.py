@@ -4,7 +4,8 @@ from bertopic.vectorizers import ClassTfidfTransformer
 from gensim.models import CoherenceModel
 from sklearn.feature_extraction.text import CountVectorizer
 from konlpy.tag import Mecab
-       
+from tokenizer import DataProcessor
+
 class TopicModeler:
     def __init__(self, dataprocessor, max_features=3000):
         self.vectorizer = CountVectorizer(tokenizer=dataprocessor, max_features=max_features)
