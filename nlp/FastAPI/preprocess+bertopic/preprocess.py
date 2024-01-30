@@ -38,15 +38,15 @@ def create_table(self):
     Base.metadata.create_all(self.engine)
 
 def save_preprocessed_data(self):
-if self.preprocessed_news_data is not None:
-    data_dict = self.preprocessed_news_data.to_dict(orient='records')
-
-    with self.engine.begin() as connection:  # Automatically commits or rolls back
-        for record in data_dict:
-            try:
-                connection.execute(PreprocessedNews.__table__.insert(), record)
-            except Exception as e:
-                print(f"Error inserting record: {e}")
+    if self.preprocessed_news_data is not None:
+        data_dict = self.preprocessed_news_data.to_dict(orient='records')
+    
+        with self.engine.begin() as connection:  # Automatically commits or rolls back
+            for record in data_dict:
+                try:
+                    connection.execute(PreprocessedNews.__table__.insert(), record)
+                except Exception as e:
+                    print(f"Error inserting record: {e}")
 
 def preprocess_data(self, start_date, end_date):     # 쿼리 추가 - 사용자가 선택하는 날짜에 대해서만 전처리
     query = "SELECT * FROM news_crawl WHERE date >= :start_date AND date <= :end_date"
