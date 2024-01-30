@@ -95,7 +95,7 @@ class DataProcessor:
         df["text"] = df["title"] + " " + df["document"]
 
         # Apply tokenization and ensure tokenized_text_mc is created
-        df["tokenized_text_mc"] = df["text"].apply(self.DataProcessor)
+        df["tokenized_text_mc"] = df["text"].apply(self)
 
         # Debugging: Print DataFrame and columns
         print("DataFrame after tokenization:")
