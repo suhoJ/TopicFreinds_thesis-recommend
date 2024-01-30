@@ -4,7 +4,7 @@ import pandas as pd
 import sqlalchemy
 import logging
 from tokenizer import DataProcessor
-from bertopic_model import TopicModel
+from bertopic_model import TopicModeler
 
 # Update this with your MySQL RDS credentials
 db_username = "goorm"
