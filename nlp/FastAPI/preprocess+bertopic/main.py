@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 import preprocess 
 import pandas as pd
 import sqlalchemy
@@ -14,6 +14,7 @@ from sqlalchemy.orm import declarative_base # 2.0이상 버전 - 확인 요망
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.dialects.mysql import LONGTEXT
 from preprocess import PreprocessedNews
+from sqlalchemy import create_engine
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
