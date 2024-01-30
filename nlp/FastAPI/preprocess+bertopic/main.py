@@ -6,6 +6,7 @@ import logging
 import preprocess
 from tokenizer import DataProcessor
 from bertopic_model import TopicModeler
+from bertopic_model import apply_category_models
 from konlpy.tag import Mecab
 
 # Update this with your MySQL RDS credentials
