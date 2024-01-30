@@ -54,7 +54,27 @@ class TopicModeler:
                                verbose=True)
         topics, _ = topic_model.fit_transform(docs)
         return topic_model
+        
+    def get_top_keywords(self, topic_model, max_topic=10):
+        top_keywords = []
+        for topic_number in sorted(topic_model.get_topics()):
+            if topic_number != -1 and topic_number <= max_topic: 
+                topic_keywords = topic_model.get_topic(topic_number)
+                top_keyword = topic_keywords[0][0]  # 가장 중요도가 높은 키워드 선택
+                top_keywords.append((topic_number, top_keyword))
+        return top_keywords
 
+     def create_wordcloud(self, all_keywords, width=800, height=400)
+        font_path='/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf'                 
+        wordcloud = WordCloud(font_path=font_path, width=width, height=height, background_color='white')
+        wordcloud.generate_from_frequencies(all_keywords)
+
+        # 시각화
+        plt.figure(figsize=(10, 5))
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.axis('off')
+        plt.show()                     
+        
 def apply_category_models(df, tokenizer):
     modeler = TopicModeler(tokenizer)
     category_models = {}
