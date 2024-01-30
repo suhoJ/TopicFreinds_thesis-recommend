@@ -5,6 +5,7 @@ import sqlalchemy
 import logging
 from tokenizer import DataProcessor
 from bertopic_model import TopicModeler
+from konlpy.tag import Mecab
 
 # Update this with your MySQL RDS credentials
 db_username = "goorm"
