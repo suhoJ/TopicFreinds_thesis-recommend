@@ -4,6 +4,7 @@ from bertopic.vectorizers import ClassTfidfTransformer
 from gensim.models import CoherenceModel
 from sklearn.feature_extraction.text import CountVectorizer
 from konlpy.tag import Mecab
+
 class DataProcessor:
     def __init__(self, tagger, engine, n=2):
         self.engine = engine
