@@ -1,6 +1,3 @@
-
-
-
 class DataProcessor:
     def __init__(self, tagger, engine, n=2):
         self.engine = engine
