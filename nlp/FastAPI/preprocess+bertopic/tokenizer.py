@@ -12,7 +12,7 @@ class DataProcessor:
         self.correction_dict = {'lg' : '엘지', '중신' : '중신용', 'rd': 'R&D', '생활건강': '엘지생활건강', '예술전당': '예술의전당', 
                                 '엘지생활':'엘지생활건강', 'gbgb' : ''}
         
-   def __call__(self, text):
+    def __call__(self, text):
         text = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
         raw_pos_tagged = self.tagger.pos(text)
         word_cleaned = [word for word, tag in raw_pos_tagged if tag in ['NNG', "SL"] and len(word) != 1 and word not in self.stopwords]
