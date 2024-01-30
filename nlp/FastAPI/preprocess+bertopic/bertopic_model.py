@@ -43,6 +43,8 @@ class TopicModeler:
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis('off')
         plt.show()                     
+
+        return wordcloud
         
 def apply_category_models(df, tokenizer):
     modeler = TopicModeler(tokenizer)
