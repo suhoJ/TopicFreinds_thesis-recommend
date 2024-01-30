@@ -2,7 +2,8 @@ import pandas as pd
 import re
 from konlpy.tag import Mecab
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base #2.0미만 버전
+from sqlalchemy.orm import declarative_base  #2.0이상 버전
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.dialects.mysql import LONGTEXT
 
