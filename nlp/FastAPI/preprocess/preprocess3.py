@@ -47,9 +47,9 @@ class DataProcessor:
              '수준', '라이프', '여파', '해석', '고객', '국내', '관련', '내년', 'gb gb', '주요']   # 계속 변동 예정
         self.correction_dict = {'lg' : '엘지', '중신' : '중신용', 'rd': 'R&D', '생활건강': '엘지생활건강', '예술전당': '예술의전당'}
         
-   def filter_word(self, sent):
-        sent = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
-        raw_pos_tagged = self.mecab.pos(sent)
+   def filter_word(self, text):
+        textt = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
+        raw_pos_tagged = self.mecab.pos(text)
         word_cleaned = []
         for word, tag in raw_pos_tagged:
             if tag in ['NNG', "SL"] and (len(word) != 1) and (word not in self.stopwords):
@@ -87,9 +87,9 @@ class DataProcessor:
         df = pd.read_sql_query(sql=query, con=self.engine, params={'start_date': start_date, 'end_date': end_date})
         df = df.drop_duplicates(subset="document")
         df = df.dropna()
-        df["title"] = df["title"].apply(process_text)
-        df["title"] = df["title"].apply(process_title)
-        df["document"] = df["document"].apply(process_text)
+        df["title"] = df["title"].apply(self.process_text)
+        df["title"] = df["title"].apply(self.process_title)
+        df["document"] = df["document"].apply(self.process_text)
 
         # Combine title and document for tokenization
         df["text"] = df["title"] + " " + df["document"]
