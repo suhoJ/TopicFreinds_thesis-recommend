@@ -45,7 +45,7 @@ def preprocess_data(start_date: str = Query(None), end_date: str = Query(None)):
     # 'text' 열의 데이터를 fit_model에 입력
     topic_model = topic_modeler.fit_model(df['text'])
     
-    return {"message": "Data preprocessed successfully", "data": preprocessed_data}
+    return {"message": "Data preprocessed successfully", "model": topic_model}
 
 
 @app.get("/")
