@@ -21,6 +21,15 @@ class TextData(BaseModel):
     text: str
     category: str
 
+@app.post("/preprocess")
+def preprocess_data(start_date: str = Query(None), end_date: str = Query(None)):
+    if not start_date or not end_date:
+        raise HTTPException(status_code=400, detail="Start date and end date must be provided")
+
+    data_processor = DataProcessor(engine=engine)  # DataProcessor 인스턴스 생성
+    preprocessed_data = data_processor.preprocess_data(start_date, end_date)  # 전처리 메서드 호출
+    return {"message": "Data preprocessed successfully", "data": preprocessed_data}
+
 @app.post("/analyze/")
 async def analyze_text(data: TextData):
     # 데이터를 DataFrame으로 변환
