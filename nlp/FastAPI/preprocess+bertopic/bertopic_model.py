@@ -22,26 +22,18 @@ class DataProcessor:
    def __call__(self, text):
         text = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
         raw_pos_tagged = self.tagger.pos(text)
-        word_cleaned = []
-        for word, tag in raw_pos_tagged:
-            if tag in ['NNG', "SL"] and (len(word) != 1) and (word not in self.stopwords):
-                word_cleaned.append(word)
-
+        word_cleaned = [word for word, tag in raw_pos_tagged if tag in ['NNG', "SL"] and len(word) != 1 and word not in self.stopwords]
+                                                              # 태그 진행- 명사와 영어 추출, 한단어와 불용 제외시킴
         # n-gram 생성(bigram)
         ngrams = zip(*[word_cleaned[i:] for i in range(self.n)])
         ngram_list = ["".join(ngram) for ngram in ngrams]  # 띄어쓰기 없이 단어를 연결
 
         # 단어 대체(짤린 단어들 보완)
-        corrected_ngram_list = []
-        for ngram in ngram_list:
-            for wrong, correct in self.correction_dict.items():
-                ngram = ngram.replace(wrong, correct)
-            corrected_ngram_list.append(ngram)
-
+        corrected_ngram_list = [ngram for ngram in ngram_list if ngram not in self.correction_dict]
         return corrected_ngram_list
        
 class TopicModeler:
-    def __init__(self, tokenizer, max_features=3000):
+    def __init__(self, dataprocessor, max_features=3000):
         self.vectorizer = CountVectorizer(tokenizer=dataprocessor, max_features=max_features)
         self.ctfidf_model = ClassTfidfTransformer()
 
