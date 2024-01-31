@@ -67,7 +67,7 @@ pipeline {
           git config user.email "leesy010504@gmail.com"
           git config user.name "leesy010504"
           git add .
-          git commit -m "Update deployment to ${env.BUILD_NUMBER}"
+          git commit -m "Update deployment to ${tag}"
           git push origin master
           '''
         }
