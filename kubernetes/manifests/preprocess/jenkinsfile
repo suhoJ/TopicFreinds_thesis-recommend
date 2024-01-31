@@ -62,7 +62,7 @@ pipeline {
     stage('Git Commit and Push Changes') {
       steps {
         script {
-          withCredentials([usernamePassword(credentialsId: 'leesygit', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+          withCredentials([usernamePassword(credentialsId: 'lsygitid', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
             sh '''
               git branch
               git checkout main
