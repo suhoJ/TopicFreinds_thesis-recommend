@@ -7,15 +7,15 @@ import pandas as pd
 import sqlalchemy
 import logging
 
-# Update this with your MySQL RDS credentials
-db_username = "goorm"
-db_password = "goorm1415"
-db_host = "thesis-mysql.cx2cmy4wc806.ap-northeast-2.rds.amazonaws.com"
-db_name = "mydatabase"
-mysql_connection_string = f"mysql+mysqlconnector://{db_username}:{db_password}@{db_host}/{db_name}"
+# # Update this with your MySQL RDS credentials
+# db_username = "goorm"
+# db_password = "goorm1415"
+# db_host = "thesis-mysql.cx2cmy4wc806.ap-northeast-2.rds.amazonaws.com"
+# db_name = "mydatabase"
+# mysql_connection_string = f"mysql+mysqlconnector://{db_username}:{db_password}@{db_host}/{db_name}"
 
-# Create a database engine
-engine = sqlalchemy.create_engine(mysql_connection_string)
+# # Create a database engine
+# engine = sqlalchemy.create_engine(mysql_connection_string)
 
 app = FastAPI()
 
