@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: news-crawler
-        image: suhoj/thesis-backend-news_crawler:3.0.0
+        image: leesy010504/news-crawler:3.0.0
         ports:
         - containerPort: 8001
         resources:
