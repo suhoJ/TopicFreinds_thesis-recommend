@@ -47,7 +47,7 @@ pipeline {
               container('docker') {
                 checkout scm
                 def imageName = "leesy010504/news-crawler"
-                sed -i "s|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|" ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
+				sh "sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml"
 				withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                   sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                 }
