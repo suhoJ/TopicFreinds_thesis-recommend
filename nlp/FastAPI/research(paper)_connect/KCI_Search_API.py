@@ -8,8 +8,10 @@ def add_crawling(link_url):
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
-        English_title = soup.select_one('div#contents small.eng').get_text(strip=True) if soup.select_one('div#contents small.eng') else None
-        keywords = [kw.get_text(strip=True) for kw in soup.select('#keywd')] if soup.select('#keywd') else []
+        English_title = soup.select_one('div#contents small.eng').get_text(strip=True).replace("<![CDATA[", "").replace(
+            "]]>", "") if soup.select_one('div#contents small.eng') else None
+        keywords = [kw.get_text(strip=True).replace("<![CDATA[", "").replace("]]>", "") for kw in
+                    soup.select('#keywd')] if soup.select('#keywd') else []
         return {'English_title': English_title, 'keywords': keywords}
 
 def get_text(element, tag, attrs=None):
@@ -33,7 +35,7 @@ def get_api():
         final_results = []
 
         for article in articles:
-            title = get_text(article, 'article-title')
+            title = get_text(article, 'article-title').replace("<![CDATA[", "").replace("]]>", "")
             author = [get_text(author, 'author') for author in article.find_all('author')]
             publisher = get_text(soup.find('journalinfo'), 'publisher-name')
             journal_name = get_text(soup.find('journalinfo'), 'journal-name')
