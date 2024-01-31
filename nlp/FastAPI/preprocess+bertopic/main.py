@@ -15,7 +15,9 @@ from sqlalchemy import Column, Integer, Text
 from sqlalchemy.dialects.mysql import LONGTEXT
 from preprocess import PreprocessedNews
 from sqlalchemy import create_engine
-
+from pydantic import BaseModel
+from bertopic_model import TopicModeler, extract_top_keywords
+from wordcloud_generator import generate_wordcloud
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
