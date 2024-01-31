@@ -23,7 +23,18 @@ class TopicModeler:
                                verbose=True)
         topics, _ = topic_model.fit_transform(docs)
         return topic_model
-        
+
+# 각 토픽별로 최상위 키워드 추출
+def extract_top_keywords(topic_model):
+    top_keywords = []
+    for topic_number in sorted(topic_model.get_topics()):
+        if topic_number != -1 and topic_number < 10:
+            topic_keywords = topic_model.get_topic(topic_number)
+            top_keyword, weight = topic_keywords[0] # 가장 중요도가 높은 키워드 선택
+            top_keywords.append((topic_number+1, top_keyword, weight))
+    return top_keywords
+
+
     # def get_top_keywords(self, topic_model, max_topic=10):
     #     top_keywords = []
     #     for topic_number in sorted(topic_model.get_topics()):
@@ -66,12 +77,3 @@ class TopicModeler:
 #         category_top_keywords[category] = top_keywords
 #         category_wordclouds[category] = wordcloud
 #     return category_models, category_top_keywords, category_wordclouds
-
-def extract_top_keywords(topic_model):
-    top_keywords = []
-    for topic_number in sorted(topic_model.get_topics()):
-        if topic_number != -1:
-            topic_keywords = topic_model.get_topic(topic_number)
-            top_keyword, weight = topic_keywords[0]
-            top_keywords.append((topic_number, top_keyword, weight))
-    return top_keywords
