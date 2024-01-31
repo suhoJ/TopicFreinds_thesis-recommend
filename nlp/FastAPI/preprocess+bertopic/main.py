@@ -51,14 +51,23 @@ def preprocess_data(start_date: str = Query(None), end_date: str = Query(None)):
     query = "SELECT * FROM preprocessed_news"
     df = pd.read_sql_query(sql=query, con=engine)
     
+    results = {}
     # DataProcessor 인스턴스 생성- db에 저장할 필요없음, DataProcessor와 TopicModeler를 분리하면 안됨.
     data_processor = DataProcessor(tagger=mecab, engine=engine, n=2)  
     # TopicModeler 인스턴스 생성, 이 때 tokenizer로 data_processor를 넘겨줌, bertopic자체에서 토큰화 진행됨. db 저장하려면 모델 다 돌리고 저장해야함.
     topic_modeler = TopicModeler(dataprocessor=data_processor, max_features=3000)
 
-    # 각 카테고리별로 주요 키워드와 워드클라우드 생성
-    category_models, category_top_keywords, category_wordclouds = apply_category_models(df, topic_modeler)
-    return {"message": "Data preprocessed successfully", "models": category_models, "top_keywords": category_top_keywords, "wordclouds": category_wordclouds}
+    for category in df['category'].unique():
+        category_docs = df[df['category'] == category]['text'].astype(str)
+        topic_model = topic_modeler.fit_model(category_docs)
+        top_keywords = extract_top_keywords(topic_model)
+        wordcloud_img = generate_wordcloud(topic_model)
+        results[category] = {
+            "top_keywords": top_keywords,
+            "wordcloud": wordcloud_img
+        }
+
+    return results
 
 
 @app.get("/")
