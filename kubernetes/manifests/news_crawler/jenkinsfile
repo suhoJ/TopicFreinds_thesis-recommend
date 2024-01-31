@@ -68,7 +68,7 @@ pipeline {
           git config user.name "leesy010504"
           git add .
           git commit -m "Update deployment to ${tag}"
-          git push origin master
+          git push origin main
           '''
         }
       }
