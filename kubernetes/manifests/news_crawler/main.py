@@ -22,7 +22,7 @@ app = FastAPI()
 @app.get("/start-crawling")
 async def crawling():
     try:
-        start_crawling(20231207, 20231207)
+        start_crawling(20231201, 20231201)
         return {"status": "success", "message": "News crawling started."}
     except Exception as e:
         logging.error(f"An error occurred in start_crawling: {e}")
