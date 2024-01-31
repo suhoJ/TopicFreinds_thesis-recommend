@@ -47,8 +47,7 @@ pipeline {
               container('docker') {
                 checkout scm
                 def imageName = "leesy010504/news-crawler"
-				sh "sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml"
-				withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                   sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
                 }
                 sh "docker build --no-cache -t ${imageName}:${tag} ./kubernetes/manifests/news_crawler"
@@ -64,6 +63,7 @@ pipeline {
       steps {
         script {
           sh '''
+          sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
           git config user.email "leesy010504@gmail.com"
           git config user.name "leesy010504"
           git add .
