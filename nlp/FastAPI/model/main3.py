@@ -17,6 +17,10 @@ mysql_connection_string = f"mysql+mysqlconnector://{db_username}:{db_password}@{
 # Create a database engine
 engine = sqlalchemy.create_engine(mysql_connection_string)
 
+class CategoryData(BaseModel):
+    text: str
+    category: str
+    
 app = FastAPI()
 
 @app.get("/modeling")
@@ -24,7 +28,18 @@ async def modeling():
     try:
         df = pd.read_sql('SELECT * FROM preprocessed_news', engine)
         topic_modeler = TopicModeler(DataProcessor.filter_word)                   # 추가: bertopic으로 키워드 반환되게 수정.
-        category_models, category_keywords = apply_category_models(df, tokenizer)
+
+        for category in df['category'].unique():
+            category_docs = df[df['category'] == category]['text'].astype(str)
+            topic_model = topic_modeler.fit_model(category_docs)
+            top_keywords = extract_top_keywords(topic_model)
+            wordcloud_img = generate_wordcloud(topic_model)
+            results[category] = {
+                "top_keywords": top_keywords,
+                "wordcloud": wordcloud_img
+            }
+
+    return results
         return {"status": "success", "message": "Topic modeling completed."}
     except Exception as e:
         logging.error(f"An error occurred in the modeling route: {e}")
