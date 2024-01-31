@@ -68,6 +68,15 @@ st.title('Topic Keywords')
 # 사용자가 검색어를 입력하면 결과를 표시
 if search_term:
     search_results = get_search_results(search_term)
-    st.write('검색 결과:')
-    for result in search_results:
-        st.write(result)
+    if search_results:
+        # 결과를 pandas DataFrame으로 변환
+        df = pd.DataFrame(search_results)
+        # 제목 열에 하이퍼링크를 추가합니다.
+        df['Paper'] = df.apply(lambda row: f"<a href='{row['link']}' target='_blank'>{row['title']}</a><br>{row['English_title']}<br>{row['keywords']}", axis=1)
+        df = df.drop(columns=['link', 'title', 'English_title', 'publication', 'abstract', 'issue', 'pages', 'keywords', 'author'])
+        # 열 순서를 변경하여 'Paper' 열을 첫 번째로 이동합니다.
+        df = df.reindex(columns=['Paper'] + [col for col in df.columns if col != 'Paper'])
+        # HTML로 변환된 데이터를 테이블로 표시합니다.
+        st.markdown(df.to_html(escape=False, index=False), unsafe_allow_html=True)
+else:
+        st.write('검색 결과가 없습니다.')
