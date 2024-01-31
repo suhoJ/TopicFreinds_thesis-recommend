@@ -66,9 +66,9 @@ pipeline {
             sh '''
               git branch
               git checkout main
-              git config -global user.email "leesy010504@gmail.com"
-              git config -global user.name "leesy010504"
-			  sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/preprocess/preprocess-deployment.yaml
+              git config --global user.email "leesy010504@gmail.com"
+              git config --global user.name "leesy010504"
+              sed -i 's|leesy010504/preprocess:.*|leesy010504/preprocess:3.2.${tag}|' ./kubernetes/manifests/preprocess/preprocess-deployment.yaml
               git add .
               git commit -m "Update deployment to ${tag}"
               git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/github.com/suhoJ/thesis-recommend-goorm.git
