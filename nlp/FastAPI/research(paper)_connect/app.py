@@ -72,7 +72,7 @@ if search_term:
         # 결과를 pandas DataFrame으로 변환
         df = pd.DataFrame(search_results)
         # 제목 열에 하이퍼링크를 추가합니다.
-        df['Paper'] = df.apply(lambda row: f"<a href='{row['link']}' target='_blank'>{row['title']}</a><br>{row['English_title']}<br>{row['keywords']}", axis=1)
+        df['Paper'] = df.apply(lambda row: f"<a href='{row['link']}' target='_blank'>{row['title']}</a><br>{row['English_title']}<br><small>{row['keywords']}</small>", axis=1)
         df = df.drop(columns=['link', 'title', 'English_title', 'publication', 'abstract', 'issue', 'pages', 'keywords', 'author'])
         # 열 순서를 변경하여 'Paper' 열을 첫 번째로 이동합니다.
         df = df.reindex(columns=['Paper'] + [col for col in df.columns if col != 'Paper'])
