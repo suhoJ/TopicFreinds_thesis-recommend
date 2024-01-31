@@ -16,7 +16,7 @@ class DataProcessor:
         text = text[:1000000]     # 텍스트 길이 제한(메모리용량 절약)
         raw_pos_tagged = self.tagger.pos(text)
         word_cleaned = [word for word, tag in raw_pos_tagged if tag in ['NNG', "SL"] and len(word) != 1 and word not in self.stopwords]
-                                                              # 태그 진행- 명사와 영어 추출, 한단어와 불용 제외시킴
+                                                              # 태그 진행- 명사와 영어 추출, 한단어와 불용어 제외시킴
         # n-gram 생성(bigram)
         ngrams = zip(*[word_cleaned[i:] for i in range(self.n)])
         ngram_list = ["".join(ngram) for ngram in ngrams]  # 띄어쓰기 없이 단어를 연결
