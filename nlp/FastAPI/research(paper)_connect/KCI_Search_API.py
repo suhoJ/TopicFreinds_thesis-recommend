@@ -21,7 +21,7 @@ def get_text(element, tag, attrs=None):
     return ''
 
 def get_api(keyword):
-    api_key = "18556060"  #api key
+    api_key = api_key #api key
     keyword = keyword
     url = f"https://open.kci.go.kr/po/openapi/openApiSearch.kci?apiCode=articleSearch&key={api_key}&title={keyword}"
     response = requests.get(url)
