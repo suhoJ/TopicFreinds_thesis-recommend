@@ -46,23 +46,32 @@ class TopicModeler:
 
         return wordcloud
         
-def apply_category_models(df, tokenizer):
-    modeler = TopicModeler(tokenizer)
-    category_models = {}
-    category_top_keywords = {}
-    category_wordclouds = {}
+# def apply_category_models(df, tokenizer):
+#     modeler = TopicModeler(tokenizer)
+#     category_models = {}
+#     category_top_keywords = {}
+#     category_wordclouds = {}
 
-    for category in df['category'].unique():
-        category_docs = df[df['category'] == category]['text'].apply(lambda x: ' '.join(x))
-        model = modeler.fit_model(category_docs)
-        category_models[category] = model
+#     for category in df['category'].unique():
+#         category_docs = df[df['category'] == category]['text'].apply(lambda x: ' '.join(x))
+#         model = modeler.fit_model(category_docs)
+#         category_models[category] = model
 
-        # 각 카테고리별 주요 키워드 추출
-        top_keywords = modeler.get_top_keywords(model)
-        # 각 카테고리별 워드클라우드 생성
-        all_keywords = dict([word, freq] for word, freq in model.get_topic(top_keywords[0][0]))
-        wordcloud = modeler.create_wordcloud(all_keywords)
+#         # 각 카테고리별 주요 키워드 추출
+#         top_keywords = modeler.get_top_keywords(model)
+#         # 각 카테고리별 워드클라우드 생성
+#         all_keywords = dict([word, freq] for word, freq in model.get_topic(top_keywords[0][0]))
+#         wordcloud = modeler.create_wordcloud(all_keywords)
 
-        category_top_keywords[category] = top_keywords
-        category_wordclouds[category] = wordcloud
-    return category_models, category_top_keywords, category_wordclouds
+#         category_top_keywords[category] = top_keywords
+#         category_wordclouds[category] = wordcloud
+#     return category_models, category_top_keywords, category_wordclouds
+
+def extract_top_keywords(topic_model):
+    top_keywords = []
+    for topic_number in sorted(topic_model.get_topics()):
+        if topic_number != -1:
+            topic_keywords = topic_model.get_topic(topic_number)
+            top_keyword, weight = topic_keywords[0]
+            top_keywords.append((topic_number, top_keyword, weight))
+    return top_keywords
