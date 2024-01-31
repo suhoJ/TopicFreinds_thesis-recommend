@@ -71,7 +71,7 @@ pipeline {
               sed -i 's|leesy010504/preprocess:.*|leesy010504/preprocess:3.2.${tag}|' ./kubernetes/manifests/preprocess/preprocess-deployment.yaml
               git add .
               git commit -m "Update deployment to ${tag}"
-              git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/github.com/suhoJ/thesis-recommend-goorm.git
+              git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/suhoJ/thesis-recommend-goorm.git
             '''
           }
         }
