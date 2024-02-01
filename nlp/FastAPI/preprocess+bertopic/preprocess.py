@@ -35,7 +35,7 @@ def process_text(row):
 def process_title(title):
     return title_pattern.sub("", title)
 
-def create_table(self):
+def create_table(engine):
     Base.metadata.create_all(engine)
 
 def save_preprocessed_data(engine, preprocessed_news_data):
