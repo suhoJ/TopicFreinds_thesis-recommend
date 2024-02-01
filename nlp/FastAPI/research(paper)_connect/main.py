@@ -25,7 +25,7 @@ def search_papers(search_term: str) -> List[str]:
     return results  # 실제 검색 결과를 반환
 
 @app.get("/search_papers")
-async def get_search_results(search_term: str = Query(...)):
+def get_search_results(search_term: str = Query(...)):  # async  삭제
     return search_papers(search_term)
 
 @app.get("/")
