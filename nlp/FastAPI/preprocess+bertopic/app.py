@@ -8,7 +8,7 @@ import io
 preprocess_url = "http://0.0.0.0:8002/preprocess"
 
 # Example of making a POST request to your FastAPI app (modify as needed)
-response = requests.post(preprocess_url, json=[{"text": "example text", "category": "example category"}])
+response = requests.post(preprocess_url, json=[{"text": "text", "category": "category"}])
 if response.status_code == 200:
     data = response.json()
     for category, details in data.items():
