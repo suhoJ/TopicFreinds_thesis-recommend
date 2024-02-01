@@ -49,7 +49,7 @@ def save_preprocessed_data(engine, preprocessed_news_data):
                 except Exception as e:
                     print(f"Error inserting record: {e}")
 
-def preprocess_data(self, start_date, end_date):     # 쿼리 추가 - 사용자가 선택하는 날짜에 대해서만 전처리
+def preprocess_data(engine, start_date, end_date):     # 쿼리 추가 - 사용자가 선택하는 날짜에 대해서만 전처리
     query = "SELECT * FROM news_crawl WHERE date >= :start_date AND date <= :end_date"
     df = pd.read_sql_query(sql=query, con=self.engine, params={'start_date': start_date, 'end_date': end_date})
     df = df.drop_duplicates(subset="document")
