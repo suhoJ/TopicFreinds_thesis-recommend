@@ -36,13 +36,13 @@ def process_title(title):
     return title_pattern.sub("", title)
 
 def create_table(self):
-    Base.metadata.create_all(self.engine)
+    Base.metadata.create_all(engine)
 
-def save_preprocessed_data(self):
-    if self.preprocessed_news_data is not None:
-        data_dict = self.preprocessed_news_data.to_dict(orient='records')
+def save_preprocessed_data(engine, preprocessed_news_data):
+    if preprocessed_news_data is not None:
+        data_dict = preprocessed_news_data.to_dict(orient='records')
     
-        with self.engine.begin() as connection:  # Automatically commits or rolls back
+        with engine.begin() as connection:  # Automatically commits or rolls back
             for record in data_dict:
                 try:
                     connection.execute(PreprocessedNews.__table__.insert(), record)
@@ -70,6 +70,6 @@ def preprocess_data(self, start_date, end_date):     # 쿼리 추가 - 사용자
     if 'text' not in df.columns:
         raise Exception("Column 'text' not found in DataFrame")
     
-    self.preprocessed_news_data = df
-    self.create_table()
-    self.save_preprocessed_data()
+    preprocessed_news_data = df
+    create_table(engine)
+    save_preprocessed_data(engine, df)
