@@ -54,9 +54,9 @@ def preprocess_data(self, start_date, end_date):     # 쿼리 추가 - 사용자
     df = pd.read_sql_query(sql=query, con=self.engine, params={'start_date': start_date, 'end_date': end_date})
     df = df.drop_duplicates(subset="document")
     df = df.dropna()
-    df["title"] = df["title"].apply(self.process_text)     # 수정 : self 추가
-    df["title"] = df["title"].apply(self.process_title)
-    df["document"] = df["document"].apply(self.process_text)
+    df["title"] = df["title"].apply(process_text)     # 수정 : self 추가
+    df["title"] = df["title"].apply(process_title)
+    df["document"] = df["document"].apply(process_text)
     
     # Combine title and document for tokenization
     df["text"] = df["title"] + " " + df["document"]
