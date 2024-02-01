@@ -47,7 +47,7 @@ def preprocess_data(start_date: str = Query(None), end_date: str = Query(None)):
         raise HTTPException(status_code=400, detail="Start date and end date must be provided")
     
     # preprocessed_data = preprocess.preprocess_data(engine, start_date, end_date)  # 전처리 메서드 호출
-    preprocessed_data = preprocess.preprocess_data(20231207, 20231207)    # 테스트용
+    preprocessed_data = preprocess.preprocess_data(engine, 20231207, 20231207)    # 테스트용
     
     # 전처리된 데이터를 데이터베이스에서 조회
     query = "SELECT * FROM preprocessed_news"
