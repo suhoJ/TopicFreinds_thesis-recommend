@@ -72,20 +72,22 @@ pipeline {
         stage('Git Commit and Push Changes') {
             steps {
                 script {
-                    def gitUsername = "leesy010504@gmail.com"
-                    def gitPassword = "tkdasd951?"
+                    withCredentials([string(credentialsId: 'gitpushtoken', variable: 'GIT_TOKEN')]) {
+                        def gitUsername = "leesy010504"
+                        def gitToken = env.GIT_TOKEN
 
-                    sh '''
-                        git branch
-                        git checkout main
-                        git config --global user.email "leesy010504@gmail.com"
-                        git config --global user.name "leesy010504"
-                        sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
-                        git add .
-                        git commit -m "Update deployment to ${tag}"
-                        git remote set-url origin https://${gitUsername}:${gitPassword}@github.com/suhoJ/thesis-recommend-goorm
-                        git push origin main
-                    '''
+                        sh '''
+                            git branch
+                            git checkout main
+                            git config --global user.email "leesy010504@gmail.com"
+                            git config --global user.name "leesy010504"
+                            sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
+                            git add .
+                            git commit -m "Update deployment to ${tag}"
+                            git remote set-url origin https://${gitUsername}:${gitToken}@github.com/suhoJ/thesis-recommend-goorm
+                            git push origin main
+                        '''
+                    }
                 }
             }
         }
