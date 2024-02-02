@@ -16,42 +16,42 @@ pipeline {
             steps {
                 script {
                     podTemplate(yaml: '''
-                    apiVersion: v1
-                    kind: Pod
-                    spec:
-                      serviceAccountName: jenkins-admin
-                      affinity:
-                        nodeAffinity:
-                          requiredDuringSchedulingIgnoredDuringExecution:
-                            nodeSelectorTerms:
-                            - matchExpressions:
-                              - key: "env"
-                                operator: "In"
-                                values:
-                                - "standard"
-                      volumes:
-                      - name: docker-socket
-                        emptyDir: {}
-                      containers:
-                        - name: docker
-                          image: docker:19.03-dind
-                          command: ['sh', '-c', 'sleep infinity']
-                          volumeMounts:
-                            - name: docker-socket
-                              mountPath: /var/run
-                        - name: docker-daemon
-                          image: docker:19.03-dind
-                          securityContext:
-                            privileged: true
-                          volumeMounts:
-                            - name: docker-socket
-                              mountPath: /var/run
-                        - name: kubectl
-                          image: bitnami/kubectl:1.26.0
-                          command: ['sh', '-c', 'sleep infinity'] 
-                          volumeMounts:
-                            - name: docker-socket
-                              mountPath: /var/run
+                        apiVersion: v1
+                        kind: Pod
+                        spec:
+                          serviceAccountName: jenkins-admin
+                          affinity:
+                            nodeAffinity:
+                              requiredDuringSchedulingIgnoredDuringExecution:
+                                nodeSelectorTerms:
+                                - matchExpressions:
+                                  - key: "env"
+                                    operator: "In"
+                                    values:
+                                    - "standard"
+                          volumes:
+                          - name: docker-socket
+                            emptyDir: {}
+                          containers:
+                            - name: docker
+                              image: docker:19.03-dind
+                              command: ['sh', '-c', 'sleep infinity']
+                              volumeMounts:
+                                - name: docker-socket
+                                  mountPath: /var/run
+                            - name: docker-daemon
+                              image: docker:19.03-dind
+                              securityContext:
+                                privileged: true
+                              volumeMounts:
+                                - name: docker-socket
+                                  mountPath: /var/run
+                            - name: kubectl
+                              image: bitnami/kubectl:1.26.0
+                              command: ['sh', '-c', 'sleep infinity'] 
+                              volumeMounts:
+                                - name: docker-socket
+                                  mountPath: /var/run
                     ''') {
                         node(POD_LABEL) {
                             container('docker') {
@@ -72,20 +72,20 @@ pipeline {
         stage('Git Commit and Push Changes') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'lsygitid', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        sh '''
-                            git branch
-                            git checkout main
-                            git pull origin main
-                            git config --global user.email "leesy010504@gmail.com"
-                            git config --global user.name "leesy010504"
-                            sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
-                            git add .
-                            git commit -m "Update deployment to ${tag}"
-                            git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/suhoJ/thesis-recommend-goorm
-                            git push origin main
-                        '''
-                    }
+                    def gitUsername = "leesy010504"
+                    def gitPassword = "tkdasd951?"
+
+                    sh '''
+                        git branch
+                        git checkout main
+                        git config --global user.email "leesy010504@gmail.com"
+                        git config --global user.name "leesy010504"
+                        sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
+                        git add .
+                        git commit -m "Update deployment to ${tag}"
+                        git remote set-url origin https://${gitUsername}:${gitPassword}@github.com/suhoJ/thesis-recommend-goorm
+                        git push origin main
+                    '''
                 }
             }
         }
