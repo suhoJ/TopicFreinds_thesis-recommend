@@ -72,7 +72,7 @@ pipeline {
         stage('Git Commit and Push Changes') {
             steps {
                 script {
-                    def gitUsername = "leesy010504"
+                    def gitUsername = "leesy010504@gmail.com"
                     def gitPassword = "tkdasd951?"
 
                     sh '''
