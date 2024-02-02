@@ -1,88 +1,89 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    tag = "${env.BUILD_NUMBER}"
-  }
-
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    environment {
+        tag = "${env.BUILD_NUMBER}"
     }
 
-    stage('Docker pod deploy') {
-      steps {
-        script {
-          podTemplate(yaml: '''
-          apiVersion: v1
-          kind: Pod
-          spec:
-            serviceAccountName: jenkins-admin
-            affinity:
-              nodeAffinity:
-                requiredDuringSchedulingIgnoredDuringExecution:
-                  nodeSelectorTerms:
-                  - matchExpressions:
-                    - key: "env"
-                      operator: "In"
-                      values:
-                      - "standard"
-            volumes:
-            - name: docker-socket
-              emptyDir: {}
-            containers:
-              - name: docker
-                image: docker:19.03-dind
-                command: [sleep]
-                args: [99d]
-                volumeMounts:
-                  - name: docker-socket
-                    mountPath: /var/run
-              - name: docker-daemon
-                image: docker:19.03-dind
-                securityContext:
-                  privileged: true
-                volumeMounts:
-                  - name: docker-socket
-                    mountPath: /var/run
-              - name: kubectl
-                image: bitnami/kubectl:1.26.0
-                command: [sleep]
-                args: [99d]
-          ''') {
-            node(POD_LABEL) {
-              container('docker') {
+    stages {
+        stage('Checkout') {
+            steps {
                 checkout scm
-                def imageName = "leesy010504/news-crawler"
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                  sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
-                }
-                sh "docker build --no-cache -t ${imageName}:${tag} ./kubernetes/manifests/news_crawler"
-                sh "docker push ${imageName}:${tag}"
-              }
             }
-          }
         }
-      }
-    }
 
-    stage('Git Commit and Push Changes') {
-      steps {
-        script {
-          sh '''
-          git branch
-          git checkout main
-          sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
-          git config user.email "leesy010504@gmail.com"
-          git config user.name "leesy010504"
-          git add .
-          git commit -m "Update deployment to ${tag}"
-          git push origin main
-          '''
+        stage('Docker pod deploy') {
+            steps {
+                script {
+                    podTemplate(yaml: '''
+                    apiVersion: v1
+                    kind: Pod
+                    spec:
+                      serviceAccountName: jenkins-admin
+                      affinity:
+                        nodeAffinity:
+                          requiredDuringSchedulingIgnoredDuringExecution:
+                            nodeSelectorTerms:
+                            - matchExpressions:
+                              - key: "env"
+                                operator: "In"
+                                values:
+                                - "standard"
+                      volumes:
+                      - name: docker-socket
+                        emptyDir: {}
+                      containers:
+                        - name: docker
+                          image: docker:19.03-dind
+                          command: ['sh', '-c', 'sleep infinity']
+                          volumeMounts:
+                            - name: docker-socket
+                              mountPath: /var/run
+                        - name: docker-daemon
+                          image: docker:19.03-dind
+                          securityContext:
+                            privileged: true
+                          volumeMounts:
+                            - name: docker-socket
+                              mountPath: /var/run
+                        - name: kubectl
+                          image: bitnami/kubectl:1.26.0
+                          command: ['sh', '-c', 'sleep infinity'] 
+                          volumeMounts:
+                            - name: docker-socket
+                              mountPath: /var/run
+                    ''') {
+                        node(POD_LABEL) {
+                            container('docker') {
+                                checkout scm
+                                def imageName = "leesy010504/news-crawler"
+                                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+                                    sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
+                                }
+                                sh "docker build --no-cache -t ${imageName}:${tag} ./kubernetes/manifests/news_crawler"
+                                sh "docker push ${imageName}:${tag}"
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
+
+        stage('Git Commit and Push Changes') {
+            steps {
+                script {
+                    sh '''
+                    git branch
+                    git checkout main
+                    sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
+                    git config user.email "leesy010504@gmail.com"
+                    git config user.name "leesy010504"
+                    git add .
+                    git commit -m "Update deployment to ${tag}"
+                    git push origin main
+                    '''
+                }
+            }
+        }
     }
-  }
 }
