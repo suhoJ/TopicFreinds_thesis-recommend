@@ -29,9 +29,9 @@ pipeline {
                       operator: "In"
                       values:
                       - "standard"
-              volumes:
-              - name: docker-socket
-                emptyDir: {}
+            volumes:
+            - name: docker-socket
+              emptyDir: {}
             containers:
               - name: docker
                 image: docker:19.03-dind
