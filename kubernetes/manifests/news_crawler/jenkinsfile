@@ -81,7 +81,7 @@ pipeline {
                             sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
                             git add .
                             git commit -m "Update deployment to ${tag}"
-                            git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/suhoJ/thesis-recommend-goorm.git
+                            git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/suhoJ/thesis-recommend-goorm
                             git push origin main
                         '''
                     }
