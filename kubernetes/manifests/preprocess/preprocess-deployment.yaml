@@ -17,6 +17,6 @@ spec:
       containers:
       - name: preprocess-app
         # image: suhoj/thesis-backend-preprocessing:3.1.8
-        image: leesy010504/preprocess:1
+        image: leesy010504/preprocess:2
         ports:
         - containerPort: 8002
