@@ -76,6 +76,7 @@ pipeline {
                         sh '''
                             git branch
                             git checkout main
+                            git pull origin main
                             git config --global user.email "leesy010504@gmail.com"
                             git config --global user.name "leesy010504"
                             sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
