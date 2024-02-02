@@ -1,94 +1,93 @@
 pipeline {
-agent any
-environment {
-    tag = "${env.BUILD_NUMBER}"
-}
+    agent any
 
-stages {
-    stage('Checkout') {
-        steps {
-            checkout scm
-        }
+    environment {
+        tag = "${env.BUILD_NUMBER}"
     }
 
-    stage('Docker pod deploy') {
-        steps {
-            script {
-                podTemplate(yaml: '''
-                    apiVersion: v1
-                    kind: Pod
-                    spec:
-                      serviceAccountName: jenkins-admin
-                      affinity:
-                        nodeAffinity:
-                          requiredDuringSchedulingIgnoredDuringExecution:
-                            nodeSelectorTerms:
-                            - matchExpressions:
-                              - key: "env"
-                                operator: "In"
-                                values:
-                                - "standard"
-                      volumes:
-                      - name: docker-socket
-                        emptyDir: {}
-                      containers:
-                        - name: docker
-                          image: docker:19.03-dind
-                          command: ['sh', '-c', 'sleep infinity']
-                          volumeMounts:
-                            - name: docker-socket
-                              mountPath: /var/run
-                        - name: docker-daemon
-                          image: docker:19.03-dind
-                          securityContext:
-                            privileged: true
-                          volumeMounts:
-                            - name: docker-socket
-                              mountPath: /var/run
-                        - name: kubectl
-                          image: bitnami/kubectl:1.26.0
-                          command: ['sh', '-c', 'sleep infinity']
-                          volumeMounts:
-                            - name: docker-socket
-                              mountPath: /var/run
-                ''') {
-                    node(POD_LABEL) {
-                        container('docker') {
-                            checkout scm
-                            def imageName = "leesy010504/news-crawler"
-                            withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                                sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Docker pod deploy') {
+            steps {
+                script {
+                    podTemplate(yaml: '''
+                        apiVersion: v1
+                        kind: Pod
+                        spec:
+                          serviceAccountName: jenkins-admin
+                          affinity:
+                            nodeAffinity:
+                              requiredDuringSchedulingIgnoredDuringExecution:
+                                nodeSelectorTerms:
+                                - matchExpressions:
+                                  - key: "env"
+                                    operator: "In"
+                                    values:
+                                    - "standard"
+                          volumes:
+                          - name: docker-socket
+                            emptyDir: {}
+                          containers:
+                            - name: docker
+                              image: docker:19.03-dind
+                              command: ['sh', '-c', 'sleep infinity']
+                              volumeMounts:
+                                - name: docker-socket
+                                  mountPath: /var/run
+                            - name: docker-daemon
+                              image: docker:19.03-dind
+                              securityContext:
+                                privileged: true
+                              volumeMounts:
+                                - name: docker-socket
+                                  mountPath: /var/run
+                            - name: kubectl
+                              image: bitnami/kubectl:1.26.0
+                              command: ['sh', '-c', 'sleep infinity'] 
+                              volumeMounts:
+                                - name: docker-socket
+                                  mountPath: /var/run
+                    ''') {
+                        node(POD_LABEL) {
+                            container('docker') {
+                                checkout scm
+                                def imageName = "leesy010504/news-crawler"
+                                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+                                    sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
+                                }
+                                sh "docker build --no-cache -t ${imageName}:${tag} ./kubernetes/manifests/news_crawler"
+                                sh "docker push ${imageName}:${tag}"
                             }
-                            sh "docker build --no-cache -t ${imageName}:${tag} ./kubernetes/manifests/news_crawler"
-                            sh "docker push ${imageName}:${tag}"
                         }
                     }
                 }
             }
         }
-    }
 
-    stage('Git Commit and Push Changes') {
-        steps {
-            script {
-                withCredentials([string(credentialsId: 'gitpushtoken', variable: 'GIT_TOKEN')]) {
-                    def gitUsername = "leesy010504"
-                    def gitToken = env.GIT_TOKEN
+        stage('Git Commit and Push Changes') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'gitpushtoken', variable: 'GIT_TOKEN')]) {
+                        def gitUsername = "leesy010504"
+                        def gitToken = env.GIT_TOKEN
 
-                    sh '''
-                        git branch
-                        git checkout main
-                        git config --global user.email "leesy010504@gmail.com"
-                        git config --global user.name "leesy010504"
-                        sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
-                        git add .
-                        git commit -m "Update deployment to ${tag}"
-                        git remote set-url origin <https://${gitUsername}:${gitToken}@github.com/suhoJ/thesis-recommend-goorm>
-                        git push origin main
-                    '''
+                        sh '''
+                            git branch
+                            git checkout main
+                            sed -i 's|leesy010504/news-crawler:.*|leesy010504/news-crawler:3.0.${tag}|' ./kubernetes/manifests/news_crawler/crawler-deployment.yaml
+                            git add .
+                            git commit -m "Update deployment to ${tag}"
+                            git remote set-url origin <https://${gitUsername}:${gitToken}@github.com/suhoJ/thesis-recommend-goorm>
+                            git push origin main
+                        '''
+                    }
                 }
             }
         }
     }
-}
 }
