@@ -20,7 +20,16 @@ pipeline {
           kind: Pod
           spec:
             serviceAccountName: jenkins-admin
-            volumes:
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                  - matchExpressions:
+                    - key: "env"
+                      operator: "In"
+                      values:
+                      - "standard"
+              volumes:
               - name: docker-socket
                 emptyDir: {}
             containers:
