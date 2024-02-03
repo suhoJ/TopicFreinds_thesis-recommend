@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: streamlit-app-ingress
+  namespace: dev
+  annotations:
+    kubernetes.io/ingress.class: "nginx" # Or another class if you're using a different Ingress controller
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  rules:
+  - host: www.thesis-recommedation.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: streamlit-app-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - www.thesis-recommedation.com
+    secretName: streamlit-app-tls-vl68k
