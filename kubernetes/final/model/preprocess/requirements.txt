@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+mysql-connector-python
+sqlalchemy
+pandas
+konlpy
+mecab-python3
