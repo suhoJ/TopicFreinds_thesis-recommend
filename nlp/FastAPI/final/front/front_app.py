@@ -1,6 +1,7 @@
 
 import streamlit as st
 from sqlalchemy import create_engine
+from search_engine import get_data_for_keyword
 import pandas as pd
 from PIL import Image
 
@@ -102,8 +103,51 @@ st.markdown(
 )
 # 검색창
 st.title('Topic Friends')
-search_term = st.text_input('논문 검색어를 입력하세요')
 
+#############################
+
+# Incorporate a search engine
+# Using a form to group the search box and the search button
+with st.form("search_form"):
+    search_query = st.text_input("Enter a keyword to search:", key="search_query")
+    # Submit button for the form
+    search_submitted = st.form_submit_button('Search')
+    
+if search_submitted and search_query:
+    # Use the search engine to get data for the entered keyword
+    search_results = get_data_for_keyword(search_query)
+    # Store the results in the session state
+    st.session_state['search_results'] = search_results
+else:
+    # Reset the search results in the session state if no query is submitted
+    st.session_state['search_results'] = pd.DataFrame()
+
+# Refresh button to clear the search results
+if st.button('Refresh'):
+    # Clear the search results by resetting the session state key
+    st.session_state['search_results'] = pd.DataFrame()
+
+# Check if there are any search results to display
+if 'search_results' in st.session_state and not st.session_state['search_results'].empty:
+    search_results = st.session_state['search_results']
+    st.write("Search Results:")
+    for _, row in search_results.iterrows():
+        # Display the title as a clickable hyperlink, along with publisher and issue date
+        st.markdown(f"[{row['title']}]({row['link']}) - {row['publisher']}, {row['issue_date']}", unsafe_allow_html=True)
+else:
+    # This message will be shown if the search results are empty (e.g., after pressing "Refresh")
+    st.write("Please enter a keyword and press 'Search', or 'Refresh' to clear previous search results.")
+
+
+
+
+
+
+
+
+
+
+#############################
 st.title('News & Thesis')
 
 # Category selection for news using checkboxes
