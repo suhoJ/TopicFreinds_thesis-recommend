@@ -1,0 +1,58 @@
+# # Use an official Python runtime as a parent image
+# FROM python:3.8-slim
+
+# # Set the working directory in the container
+# WORKDIR /app
+
+# # Copy the current directory contents into the container at /app
+# COPY . /app
+
+# # Install any needed packages specified in requirements.txt
+# COPY requirements.txt /app/
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# # Make port 8000 available to the world outside this container
+# EXPOSE 8001
+
+# # Define environment variable
+# ENV NAME World
+
+# # Run app.py when the container launches
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
+
+# Use a base image that supports Chrome installation (e.g., python:3.8)
+FROM python:3.9
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Install Google Chrome
+RUN apt-get update && apt-get install -y wget gnupg \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' \
+    && apt-get update && apt-get install -y google-chrome-stable \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install ChromeDriver
+RUN apt-get update && apt-get install -yqq unzip \
+    && wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip \
+    && unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/ \
+    && rm /tmp/chromedriver.zip
+
+# Install any needed packages specified in requirements.txt
+# Ensure you have a requirements.txt file in the same directory as the Dockerfile
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Make port 8000 available to the world outside this container
+EXPOSE 8001
+
+# Define environment variable
+ENV NAME World
+
+# Run your application when the container launches
+# Replace "your_app_module:app" with your actual application module and instance
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]

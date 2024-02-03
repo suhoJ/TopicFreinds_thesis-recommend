@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+mysql-connector-python
+sqlalchemy
+selenium
+bs4
+requests
+webdriver-manager
+pandas
