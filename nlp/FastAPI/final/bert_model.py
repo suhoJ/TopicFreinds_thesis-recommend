@@ -27,10 +27,12 @@ class TopicModeler:
 
     def fit_model(self, docs, embedding_model="sentence-transformers/xlm-r-100langs-bert-base-nli-stsb-mean-tokens"):
         topic_model = BERTopic(embedding_model=embedding_model,
-                              top_n_words=5,
-                              min_topic_size=30,
-                              nr_topics="auto",
-                              verbose=True)
+                               vectorizer_model=self.vectorizer,
+                               ctfidf_model=self.ctfidf_model,
+                               top_n_words=5,
+                               min_topic_size=30,
+                               nr_topics="auto",
+                               verbose=True)
 
         topics, _ = topic_model.fit_transform(docs)
         return topic_model
