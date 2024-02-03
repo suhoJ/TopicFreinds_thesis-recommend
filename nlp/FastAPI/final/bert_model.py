@@ -18,7 +18,7 @@ class DataProcessor:
 
 # TopicModeler class
 class TopicModeler:
-    def __init__(self, tokenizer, max_features=3000):
+    def __init__(self):
         # self.vectorizer = CountVectorizer(tokenizer=tokenizer, max_features=max_features)
         # self.ctfidf_model = ClassTfidfTransformer()
         self.umap_model = UMAP(n_neighbors=15, min_dist=0.1, n_components=5, random_state=42, metric='cosine')
