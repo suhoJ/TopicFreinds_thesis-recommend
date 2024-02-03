@@ -5,6 +5,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 from bertopic.vectorizers import ClassTfidfTransformer
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
+from io import StringIO
 
 # Define the custom tokenizer using Mecab
 class DataProcessor:
@@ -18,20 +21,18 @@ class DataProcessor:
 
 # TopicModeler class
 class TopicModeler:
-    def __init__(self):
-        # self.vectorizer = CountVectorizer(tokenizer=tokenizer, max_features=max_features)
-        # self.ctfidf_model = ClassTfidfTransformer()
-        self.umap_model = UMAP(n_neighbors=15, min_dist=0.1, n_components=5, random_state=42, metric='cosine')
-        self.hdbscan_model = hdbscan.HDBSCAN(min_cluster_size=10, metric='euclidean', cluster_selection_method='eom', prediction_data=True)
+    def __init__(self, dataprocessor, max_features=3000):
+        self.vectorizer = CountVectorizer(tokenizer=dataprocessor, max_features=max_features)
+        self.ctfidf_model = ClassTfidfTransformer()
 
     def fit_model(self, docs, embedding_model="sentence-transformers/xlm-r-100langs-bert-base-nli-stsb-mean-tokens"):
-        topic_model = BERTopic(embedding_model="sentence-transformers/xlm-r-100langs-bert-base-nli-stsb-mean-tokens", \
-                 vectorizer_model=vectorizer,
-                 top_n_words=15,
-                 min_topic_size=10,
-                 umap_model=umap_model,hdbscan_model=hdbscan_model,
-                 verbose=True)
-        topics, probs = model.fit_transform(documents)
+        topic_model = BERTopic(embedding_model=embedding_model,
+                              top_n_words=5,
+                              min_topic_size=30,
+                              nr_topics="auto",
+                              verbose=True)
+
+        topics, _ = topic_model.fit_transform(docs)
         return topic_model
 
 # Function to extract the top keyword for each topic
