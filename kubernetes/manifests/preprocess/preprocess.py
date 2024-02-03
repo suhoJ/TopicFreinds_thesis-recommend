@@ -108,6 +108,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Text
 from sqlalchemy.dialects.mysql import LONGTEXT
+from sqlalchemy import text
 
 # SQLAlchemy base class for declarative models
 Base = declarative_base()
@@ -116,7 +117,9 @@ Base = declarative_base()
 class PreprocessedNews(Base):
     __tablename__ = 'preprocessed_news'
     id = Column(Integer, primary_key=True)
+    category = Column(Text)
     title = Column(Text)
+    link = Column(Text)
     document = Column(LONGTEXT)
     tokenized_text_mc = Column(LONGTEXT)
 
@@ -138,10 +141,7 @@ def process_title(title):
     return title_pattern.sub("", title)
 
 def limit_text(text):
-    if len(text) > 1000000:
-        sent = text[:1000000]  # Use only the first 1,000,000 characters
-    else:
-        sent = text
+    return text[:1000000] if len(text) > 1000000 else text
 
 class DataProcessor:
     def __init__(self, engine):
@@ -152,7 +152,8 @@ class DataProcessor:
              '전년', '제품', '업체', '기업', '지난해', '대비', '올해', '의원', '내년도', '절반', '당기', '대표', '만나', '분기',
              '국민', '정부', '지역', '현수막', '비중', '포토', 'vs', '파렴치','오전', '오후','정보', '이날', '상품', '세계',
              '시장', '경제', '과학', '사회', '문화', '정치', '생활', '처음', '가능', '매출', '소재', '작품', '자신', '위치', 'KB',
-             '수준', '라이프', '여파', '해석', '고객', '국내']
+             '수준', '라이프', '여파', '해석', '고객', '국내', '관련', '내년', 'gb', '주요']
+        self.correction_dict = {'lg' : '엘지', '중신' : '중신용', 'rd': 'R&D', '생활건강': '엘지생활건강', '예술전당': '예술의전당', '엘지생활':'엘지생활건강'}
 
     def filter_word(self, text):
         sent = limit_text(text)     # 텍스트 길이 제한(메모리용량 절약)
@@ -177,15 +178,15 @@ class DataProcessor:
                     except Exception as e:
                         print(f"Error inserting record: {e}")
 
-    def preprocess_data(self, start_date, end_date):     # 쿼리 추가 - 사용자가 선택하는 날짜에 대해서만 전처리
-        query = "SELECT * FROM news_crawl WHERE date >= :start_date AND date <= :end_date"
+    def preprocess_data(self, start_date='2024-01-31', end_date='2024-01-31'):     # 쿼리 추가 - 사용자가 선택하는 날짜에 대해서만 전처리
+        query = text("SELECT * FROM news_crawl WHERE date(date) >= :start_date AND date(date) <= :end_date")
         df = pd.read_sql_query(sql=query, con=self.engine, params={'start_date': start_date, 'end_date': end_date})
         df = df.drop_duplicates(subset="document")
         df = df.dropna()
         df["title"] = df["title"].apply(process_text)
         df["title"] = df["title"].apply(process_title)
         df["document"] = df["document"].apply(process_text)
-
+        # df['category'] = df['category']
         # Combine title and document for tokenization
         df["text"] = df["title"] + " " + df["document"]
 
