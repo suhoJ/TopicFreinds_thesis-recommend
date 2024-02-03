@@ -1,0 +1,20 @@
+fastapi
+uvicorn
+mysql-connector-python
+sqlalchemy
+pandas
+threadpoolctl==3.1.0
+bertopic
+# beautifulsoup4
+# requests
+importlib-metadata
+numpy
+# gensim
+scikit-learn
+sentence-transformers
+konlpy
+mecab-python3
+# datetime
+# typing
+wordcloud
+matplotlib

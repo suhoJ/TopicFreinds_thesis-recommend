@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modeling-app-deployment
+spec:
+  selector:
+    matchLabels:
+      app: modeling-app
+  template:
+    metadata:
+      labels:
+        app: modeling-app
+    spec:
+      containers:
+      - name: modeling-app
+        image: suhoj/thesis-model:4.0.4
+        # image: suhoj/thesis-model:3.1.1
+        ports:
+        - containerPort: 8003
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: env
+      #           operator: In
+      #           values:
+      #           - gpu
+      # tolerations:
+      # - key: "node.kubernetes.io/disk-pressure"
+      #   operator: "Exists"
+      #   effect: "NoSchedule"
+        # tolerationSeconds: 3600

@@ -1,0 +1,75 @@
+# Use an official NVIDIA CUDA image as a parent image
+# FROM pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime
+FROM nvcr.io/nvidia/pytorch:21.05-py3
+# Set the working directory in the container
+WORKDIR /app
+
+# RUN apt-get update && apt-get install -y python3 python3-pip
+
+# RUN pip install "importlib-metadata; python_version < '3.8'"
+# Install MeCab and related dependencies
+RUN apt-get update && apt-get install -y \
+    g++ \
+    openjdk-11-jdk \
+    python3-dev \
+    curl \
+    libmecab2 \
+    mecab \
+    mecab-ipadic \
+    mecab-ipadic-utf8 \
+    build-essential \
+    autoconf \
+    automake \
+    libtool \
+    git \
+    gcc \
+    fontconfig \
+    fonts-nanum* 
+
+
+# Update font cache
+RUN fc-cache -fv
+
+# Install MeCab-Ko
+RUN curl -L https://bitbucket.org/eunjeon/mecab-ko/downloads/mecab-0.996-ko-0.9.2.tar.gz | tar zxfv - \
+    && cd mecab-0.996-ko-0.9.2 \
+    && ./configure \
+    && make \
+    && make check \
+    && make install \
+    && cd .. \
+    && echo "/usr/local/lib" >> /etc/ld.so.conf \
+    && ldconfig
+
+# Install MeCab-Ko-DIC
+RUN curl -L https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.1.1-20180720.tar.gz | tar zxfv - \
+    && cd mecab-ko-dic-2.1.1-20180720 \
+    && ./autogen.sh \
+    && ./configure \
+    && make \
+    && make install \
+    && cd .. \
+    && ldconfig
+
+# Clean up
+RUN apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf mecab-0.996-ko-0.9.2 mecab-ko-dic-2.1.1-20180720 \
+    && apt-get -y remove g++ build-essential autoconf automake libtool git \
+    && apt-get -y autoremove
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install any needed packages specified in requirements.txt
+COPY requirements.txt /app/
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Make port 8003 available to the world outside this container
+EXPOSE 8003
+
+# Define environment variable
+ENV NAME World
+
+# Run app.py when the container launches
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8003"]
