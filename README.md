@@ -1,30 +1,36 @@
 # thesis-recommend-goorm
+![슬라이드1](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/c648a195-9a58-4a93-a528-14cafcdf103f)
+![슬라이드2](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/5201e70b-8f9f-4214-b700-0195ad5aa07d)
+![슬라이드3](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/104b2a85-a4f9-45f0-8004-23128f2b88af)
+![슬라이드4](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/0c463b5f-0ae5-4681-ada2-467f59e91b10)
+![슬라이드5](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/59c779a0-7fb0-4c5e-9e72-4ae5fcd77746)
+![슬라이드6](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/7aa40122-0663-4115-89d9-a4ca0254ec05)
+![슬라이드7](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/68999bca-235e-4c51-bd16-c4f38240997c)
+![슬라이드8](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/b476ee0c-1ed9-4d2f-b7c3-3a19fdf124d4)
+![슬라이드9](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/36e146c0-5086-48f7-bec0-1f7742b3bad3)
+![슬라이드10](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/680f05d9-b072-416a-8400-7f3d167683cd)
+![슬라이드11](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/2383be86-c624-43b3-be98-e6ec06477e1e)
+![슬라이드12](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/beda5d37-6ddc-41f5-bd81-652217d7be8f)
+![슬라이드13](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/939b2d56-d8de-44c6-bfac-75ca3c171a5d)
+![슬라이드14](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/1a9e3536-fe9c-4c87-9aee-dfa2712d8dc7)
+![슬라이드15](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/d9edb8f8-fb50-4412-b7a1-982637c51cfc)
+![슬라이드16](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/66a5afc2-1f1d-46f3-aef2-924fc18d4bbb)
+![슬라이드17](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/59b48f6c-bd07-4f9e-9263-a1f97b3e75a4)
+![슬라이드18](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/1274789e-eedb-423b-b943-277acfccdcc4)
+![슬라이드19](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/99308d8e-8fb3-4a12-a271-1b8ca23ea21d)
+![슬라이드20](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/4174b88f-4009-47d2-9886-98830f48810e)
+![슬라이드21](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/d6c9564c-6d6b-44b8-9772-fd58ac716ebf)
+![슬라이드22](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/3469e16b-c224-4483-9f3a-61f90d34d571)
+![슬라이드23](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/f88ce3dd-f7d5-4beb-9df8-ac4939e304a4)
+![슬라이드24](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/df8ab62d-1845-41fe-b5f4-ffa0b420beb4)
+![슬라이드25](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/1b888026-247b-48e6-9d7f-e9dfa50d1581)
+![슬라이드26](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/5531ac3a-5500-4269-9a24-fa5a269d2a4b)
+![슬라이드27](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/45c5c46a-c312-4b89-a85a-b4209a26d9be)
+![슬라이드28](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/a684333e-1c72-436c-8ddf-632903a6074a)
+![슬라이드29](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/15f86b70-3185-41ef-b12a-e3d3c26658ec)
+![슬라이드30](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/c05087b4-91c7-4db2-b1cd-1ded11032292)
+![슬라이드31](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/b8190564-6d90-4915-974f-ebbbf588fab5)
+![슬라이드32](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/0ce49b48-f9e2-4fdf-94e6-7854445913ad)
+![슬라이드33](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/7149ed4d-045e-4fb5-94ee-71735694c831)
+![슬라이드34](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/867bc984-7d61-4c86-9547-bd3f1fcda4b3)
 
-구름 프로젝트 2조
-정수호, 임상규, 이상윤, 노지원, 여민수
-
-https://www.notion.so/2-0bc33b79688d47af8dd36702917730fb
-
-thesis rocommendation project in goorm
-
-
-
-
-1. 뉴스 데이터 전처리
-2. BERTopic을 이용한 키워드 추출
-3. 논문 검색 API 호출
-4. KLUE-RoBERTa 모델 실행
-
-
-![아키텍쳐3 drawio](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/5aff3977-99e6-4119-8edd-219b7ea0266e)
-
-![infra drawio](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/c962dd6e-d967-4f0a-8904-1bfe0695ca5f)
-
-![CI_CD pipeline](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/a769a04e-628b-4c52-9688-85a78497d90e)
-
-![data flow](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/f6e7588e-2fce-47cb-98ad-d5c84b95ac16)
-
-![버저닝 drawio (1)](https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/7e6453bf-9fa6-466e-9de8-26ef01e92608)
-
-<img width="569" alt="스크린샷 2024-01-17 오후 1 42 03" src="https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/260d6eed-00a8-4298-9afb-0d4a8c2adf10">
-<img width="572" alt="스크린샷 2024-01-17 오후 1 42 09" src="https://github.com/suhoJ/thesis-recommend-goorm/assets/95326370/8c9b3f17-09b6-4513-98c9-a366ff1e9556">
